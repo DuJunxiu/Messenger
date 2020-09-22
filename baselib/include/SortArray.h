@@ -2,7 +2,7 @@
 #ifndef __SORT_ARRAY_H__
 #define __SORT_ARRAY_H__
 
-#include <string.h>
+
 
 namespace MyMessenger
 {
@@ -148,7 +148,7 @@ namespace MyMessenger
 			{
 				iIndex = 0;
 			}
-			else if (iIndex > m_iUsedCount)
+			else if (iIndex >= m_iUsedCount)
 			{
 				iIndex = m_iUsedCount - 1;
 			}
