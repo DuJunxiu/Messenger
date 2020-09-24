@@ -1,0 +1,14 @@
+
+#ifndef __PROTOCOL_HPP__
+#define __PROTOCOL_HPP__
+
+
+#define	MSGID_LOGINSERVER_REQUEST		101		// 登录请求
+#define	MSGID_LOGINSERVER_RESPONSE		102		// 登录响应
+#define	MSGID_LOGINSERVER_NOTIFY		103		// 登录通知
+#define	MSGID_LOGINOUTSERVER_REQUEST	104		// 登出请求
+#define	MSGID_LOGINOUTSERVER_RESPONSE	105		// 登出响应
+#define	MSGID_LOGINOUTSERVER_NOTIFY		106		// 登出通知
+
+
+#endif

@@ -13,12 +13,16 @@ public:
 	~CEventLoop() {}
 
 public:
+	// 初始化
 	int initialize();
-	
+
+	// 释放
 	int release();
-	
+
+	// 
 	int routine();
-	
+
+	// 定时器
 	void OnTick();
 
 private:

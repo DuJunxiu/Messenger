@@ -1,5 +1,6 @@
 
 #include "EventLoop.hpp"
+#include "TimeUtility.h"
 
 int CEventLoop::m_iCommand = SERVER_NOTHING;
 
@@ -17,6 +18,7 @@ int CEventLoop::routine()
 {
 	while (true)
 	{
+		CTimeUtility::m_uiTime = time(NULL);
 		if (SERVER_STOP == m_iCommand)
 		{
 			break;

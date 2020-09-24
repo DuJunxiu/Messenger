@@ -18,39 +18,19 @@ namespace MyMessenger
 		~CSocket()	{}
 
 	public:
-		/**
-		 * @func desc:	initialize
-		 * @param in:
-		 * @return:		scucess:0 / otherwise:-1
-		 */
+		// 初始化
 		int initialize(void);
 
-		/**
-		 * @func desc:	Create Socket
-		 * @param in:
-		 * @return:		SokcetFD
-		 */
+		// 创建socket
 		int createSocket(void);
 
-		/**
-		 * @func desc:	Bind Socket
-		 * @param in:	strIP:IP	usPort:port
-		 * @return:		scucess:0 / otherwise:-1
-		 */
+		// 绑定地址
 		int bindAddress(std::string strIP = "", uint16_t usPort = 0);
 
-		/**
-		 * @func desc:	Listen Socket
-		 * @param in:
-		 * @return:		null
-		 */
+		// 监听socket
 		void listenSocket(void);
 
-		/**
-		 * @func desc:	Accept Request
-		 * @param in:
-		 * @return:		Client SokcetFD
-		 */
+		// 接收消息
 		int acceptRequest();
 
 	private:

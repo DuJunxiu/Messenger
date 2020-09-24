@@ -14,7 +14,7 @@ int main()
 	{
 		return -1;
 	}
-	
+
 	pstLoop->initialize();
 
 	pstLoop->routine();
