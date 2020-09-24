@@ -9,34 +9,34 @@
 
 namespace MyMessenger
 {
-	const int MAX_LISTEN_SOCKET_COUNT = 5;
-	
-	class CSocket
-	{
-	public:
-		CSocket()	{}
-		~CSocket()	{}
+    const int MAX_LISTEN_SOCKET_COUNT = 5;
+    
+    class CSocket
+    {
+    public:
+        CSocket()    {}
+        ~CSocket()    {}
 
-	public:
-		// 初始化
-		int initialize(void);
+    public:
+        // 初始化
+        int initialize(void);
 
-		// 创建socket
-		int createSocket(void);
+        // 创建socket
+        int createSocket(void);
 
-		// 绑定地址
-		int bindAddress(std::string strIP = "", uint16_t usPort = 0);
+        // 绑定地址
+        int bindAddress(std::string strIP = "", uint16_t usPort = 0);
 
-		// 监听socket
-		void listenSocket(void);
+        // 监听socket
+        void listenSocket(void);
 
-		// 接收消息
-		int acceptRequest();
+        // 接收消息
+        int acceptRequest();
 
-	private:
-		int m_iServerSockFD;
+    private:
+        int m_iServerSockFD;
 
-	};
+    };
 }
 
 #endif
