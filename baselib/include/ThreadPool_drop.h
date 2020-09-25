@@ -99,38 +99,38 @@ namespace MyMessenger
         }
 
         // 执行任务
-        int routine(void* arg)
+        static void* routine(void* arg)
         {
+			CThreadPool* pstThreadPool = (CThreadPool*)arg;
             while (true)
             {
-                if (NULL == m_pstStart)
+                if (NULL == pstThreadPool->m_pstStart)
                 {
                     // 没事情做就休息一下吧
                     // usleep(1000);
                     // continue;
+                    pstThreadPool->wait();
                     break;
                 }
 
-                lock();
+                pstThreadPool->lock();
 
-                --m_iIdelCount;
+                --pstThreadPool->m_iIdelCount;
 
-                TASK* pstRoutine = m_pstStart;
-                m_pstStart = m_pstStart->m_pstNext;
+                TASK* pstRoutine = pstThreadPool->m_pstStart;
+                pstThreadPool->m_pstStart = pstThreadPool->m_pstStart->m_pstNext;
                 pstRoutine->m_pfRun(pstRoutine->m_pArg);
                 delete pstRoutine;
                 pstRoutine = NULL;
-                
-                wait();
 
-                ++m_iIdelCount;
+                ++pstThreadPool->m_iIdelCount;
 
-                unlock();
+                pstThreadPool->unlock();
             }
 
-            wait();
+            pstThreadPool->wait();
 
-            return 0;
+            return NULL;
         }
 
         int addTask(void* (*run)(void *arg), void* arg)

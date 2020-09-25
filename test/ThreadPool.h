@@ -3,6 +3,7 @@
 #define __THREAD_POOL_H__
 
 #include <pthread.h>
+#include <stdio.h>
 
 namespace MyMessenger
 {
@@ -49,6 +50,8 @@ namespace MyMessenger
                     delete[] m_pstThread;
                     return -1;
                 }
+
+				printf("thread %d create sucess\n", m_pstThread[i]);
             }
 
             return 0;
@@ -82,35 +85,38 @@ namespace MyMessenger
         }
 
         // 执行任务
-        void* routine(void* arg)
+        static void* routine(void* arg)
         {
+			CThreadPool* pstThreadPool = (CThreadPool*)arg;
             while (true)
             {
-                if (NULL == m_pstStart)
+                if (NULL == pstThreadPool->m_pstStart)
                 {
                     // 没事情做就休息一下吧
                     // usleep(1000);
                     // continue;
-                    wait();
+                    pstThreadPool->wait();
                     break;
                 }
 
-                lock();
+                pstThreadPool->lock();
 
-                --m_iIdelCount;
+                --pstThreadPool->m_iIdelCount;
+				
+				printf("thread %d is woring\n", pthread_self());
 
-                TASK* pstRoutine = m_pstStart;
-                m_pstStart = m_pstStart->m_pstNext;
+                TASK* pstRoutine = pstThreadPool->m_pstStart;
+                pstThreadPool->m_pstStart = pstThreadPool->m_pstStart->m_pstNext;
                 pstRoutine->m_pfRun(pstRoutine->m_pArg);
                 delete pstRoutine;
                 pstRoutine = NULL;
 
-                ++m_iIdelCount;
+                ++pstThreadPool->m_iIdelCount;
 
-                unlock();
+                pstThreadPool->unlock();
             }
 
-            wait();
+            pstThreadPool->wait();
 
             return NULL;
         }

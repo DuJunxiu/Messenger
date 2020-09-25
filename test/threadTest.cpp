@@ -6,11 +6,11 @@
 
 using namespace MyMessenger;
 
-void PrintMyself(void* arg)
+void* PrintMyself(void* arg)
 {
-	printf("thread: %d is working %d\n", pthread_self(), *(int*(arg)));
+	printf("thread: %d is working %d\n", pthread_self(), *(int*)arg);
 
-	return;
+	return NULL;
 }
 
 int main()
