@@ -27,8 +27,8 @@ namespace MyMessenger
     public:
         int initialize()
         {
-			// 初始化线程池
-			threadpool_init(&m_stPool, MAX_THREAD_COUNT);
+            // 初始化线程池
+            threadpool_init(&m_stPool, MAX_THREAD_COUNT);
 
             m_iIdelCount = 0;
             m_pstThread = NULL;
@@ -46,16 +46,16 @@ namespace MyMessenger
                 if(0 != pthread_create(m_pstThread + i, NULL, routine, &m_stPool)) 
                 {
                     delete[] m_pstThread;
-					
-					TRACELOG("Error create thread failed !\n");
+                    
+                    TRACELOG("Error create thread failed !\n");
                     return -1;
                 }
 
                 if(0 != pthread_detach(m_pstThread[i]))
                 {
                     delete[] m_pstThread;
-					
-					TRACELOG("Error detach thread failed !\n");
+                    
+                    TRACELOG("Error detach thread failed !\n");
                     return -1;
                 }
             }
@@ -65,16 +65,16 @@ namespace MyMessenger
 
         int release()
         {
-			// 唤醒所有线程
-			if (m_iIdelCount < MAX_THREAD_COUNT)
-			{
-				broadcast();
-			}
+            // 唤醒所有线程
+            if (m_iIdelCount < MAX_THREAD_COUNT)
+            {
+                broadcast();
+            }
 
-			for (int i = 0; i < MAX_THREAD_COUNT - m_iIdelCount; ++i)
-			{
-				wait();
-			}
+            for (int i = 0; i < MAX_THREAD_COUNT - m_iIdelCount; ++i)
+            {
+                wait();
+            }
 
             m_iIdelCount = 0;
             pthread_mutex_destroy(&m_stMutex);
@@ -97,8 +97,8 @@ namespace MyMessenger
 
             delete[] m_pstThread;
             m_pstThread = NULL;
-			
-			threadpool_destroy(&m_stPool);
+            
+            threadpool_destroy(&m_stPool);
 
             return 0;
         }
@@ -125,8 +125,8 @@ namespace MyMessenger
                 pstRoutine->m_pfRun(pstRoutine->m_pArg);
                 delete pstRoutine;
                 pstRoutine = NULL;
-				
-				wait();
+                
+                wait();
 
                 ++m_iIdelCount;
 
@@ -187,12 +187,12 @@ namespace MyMessenger
         {
             return pthread_cond_signal(&m_stCond);
         }
-		
-		// 唤醒所有线程
-		int broadcast()
-		{
-			return pthread_condition_broadcast(&m_stCond);
-		}
+        
+        // 唤醒所有线程
+        int broadcast()
+        {
+            return pthread_condition_broadcast(&m_stCond);
+        }
 
         // 等待
         int wait()
@@ -208,7 +208,7 @@ namespace MyMessenger
         pthread_cond_t m_stCond;       // 条件变量
         TASK* m_pstStart;              // 任务队列起始
         TASK* m_pstEnd;                // 任务队列结束
-		thread_pool m_stPool;          // 线程池
+        threadpool_t m_stPool;         // 线程池
 
     };
 }

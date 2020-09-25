@@ -184,7 +184,7 @@ namespace MyMessenger
         pthread_cond_t m_stCond;       // 条件变量
         TASK* m_pstStart;              // 任务队列起始
         TASK* m_pstEnd;                // 任务队列结束
-        thread_pool m_stPool;          // 线程池
+        threadpool_t m_stPool;         // 线程池
 
     };
 }
