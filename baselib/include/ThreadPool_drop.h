@@ -4,6 +4,8 @@
 
 #include <pthread.h>
 
+#include "LogDeal.hpp"
+
 namespace MyMessenger
 {
     const int MAX_THREAD_COUNT       =    5;
@@ -11,16 +13,16 @@ namespace MyMessenger
 
     typedef struct tagTask
     {
-        void* (*m_pfRun)(void* arg);    // 函数指针，指向一个任务
+        void* (*m_pfRun)(void*);        // 函数指针，指向一个任务
         void* m_pArg;                   // 函数指针，参数
-        struct tagTask* m_pstNext;                // 指向下一个任务
+        struct tagTask* m_pstNext;      // 指向下一个任务结构
     } TASK;
 
     class CThreadPool
     {
     public:
-        CThreadPool() {}
-        ~CThreadPool() {}
+        CThreadPool() { initialize(); }
+        ~CThreadPool() { release(); }
 
     public:
         int initialize()
@@ -41,12 +43,16 @@ namespace MyMessenger
                 if(0 != pthread_create(m_pstThread + i, NULL, routine, (void*)this)) 
                 {
                     delete[] m_pstThread;
+					
+					TRACELOG("Error create thread failed !\n");
                     return -1;
                 }
 
                 if(0 != pthread_detach(m_pstThread[i]))
                 {
                     delete[] m_pstThread;
+					
+					TRACELOG("Error detach thread failed !\n");
                     return -1;
                 }
             }
@@ -56,6 +62,17 @@ namespace MyMessenger
 
         int release()
         {
+			// 唤醒所有线程
+			if (m_iIdelCount < MAX_THREAD_COUNT)
+			{
+				broadcast();
+			}
+
+			for (int i = 0; i < MAX_THREAD_COUNT - m_iIdelCount; ++i)
+			{
+				wait();
+			}
+
             m_iIdelCount = 0;
             pthread_mutex_destroy(&m_stMutex);
             pthread_cond_destroy(&m_stCond);
@@ -74,7 +91,7 @@ namespace MyMessenger
             m_pstStart = NULL;
             m_pstEnd = NULL;
             m_iTaskCount = 0;
-            
+
             delete[] m_pstThread;
             m_pstThread = NULL;
 
@@ -82,7 +99,7 @@ namespace MyMessenger
         }
 
         // 执行任务
-        void* routine(void* arg)
+        int routine(void* arg)
         {
             while (true)
             {
@@ -91,7 +108,6 @@ namespace MyMessenger
                     // 没事情做就休息一下吧
                     // usleep(1000);
                     // continue;
-					wait()
                     break;
                 }
 
@@ -104,6 +120,8 @@ namespace MyMessenger
                 pstRoutine->m_pfRun(pstRoutine->m_pArg);
                 delete pstRoutine;
                 pstRoutine = NULL;
+				
+				wait();
 
                 ++m_iIdelCount;
 
@@ -112,7 +130,7 @@ namespace MyMessenger
 
             wait();
 
-            return NULL;
+            return 0;
         }
 
         int addTask(void* (*run)(void *arg), void* arg)
@@ -128,7 +146,7 @@ namespace MyMessenger
             pstTask->m_pfRun = run;
             pstTask->m_pArg = arg;
             pstTask->m_pstNext = NULL;
-            
+
             if (NULL == m_pstStart)
             {
                 m_pstStart = pstTask;
@@ -159,16 +177,22 @@ namespace MyMessenger
             return pthread_mutex_unlock(&m_stMutex);
         }
 
-        // 唤醒
+        // 唤醒一个线程
         int signal()
         {
             return pthread_cond_signal(&m_stCond);
         }
+		
+		// 唤醒所有线程
+		int broadcast()
+		{
+			return pthread_condition_broadcast(&m_stCond);
+		}
 
         // 等待
         int wait()
         {
-            return pthread_cond_wait(&m_stCond, &m_stMutex);
+            return pthread_cond_wait(&m_stCond);
         }
 
     private:

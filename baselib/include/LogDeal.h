@@ -27,6 +27,8 @@ namespace MyMessenger
         int tryWriteLog(const char *pcContent, ...);
 
         int writeLog(const char *pcContent, va_list& ap);
+		
+		int writeLogByLevel(int iLevel, const char *pcContent, va_list& ap);
 
     private:
         // 日志文件是否打开

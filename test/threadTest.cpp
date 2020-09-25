@@ -6,9 +6,9 @@
 
 using namespace MyMessenger;
 
-void PrintMyself()
+void PrintMyself(void* arg)
 {
-	printf();
+	printf("thread: %d is working %d\n", pthread_self(), *(int*(arg)));
 
 	return;
 }
@@ -24,7 +24,7 @@ int main()
 
 	for (int i = 0; i < 10; ++i)
 	{
-		pstThreadPool->addTask(PrintMyself);
+		pstThreadPool->addTask(PrintMyself, &i);
 	}
 
 	delete pstThreadPool;

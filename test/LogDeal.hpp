@@ -4,9 +4,10 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdarg.h>
 
 #include "LogDeal.hpp"
-#include "TimeUtility.hpp"
+#include "TimeUtility.h"
 #include "Singleton.h"
 
 namespace MyMessenger
@@ -65,7 +66,7 @@ namespace MyMessenger
         {
             checkLogFile();
 
-            char szDateString[MAX_DATETIME_LENGTH];
+            char szDateString[MAX_DATE_TIME_LENGTH];
             CTimeUtility::convertUnixTimeToString(CTimeUtility::m_uiTime, szDateString);
             
             fprintf(m_pFile, "[%s] ", szDateString);
