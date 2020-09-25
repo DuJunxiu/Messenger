@@ -13,7 +13,7 @@ namespace MyMessenger
     {
         void* (*m_pfRun)(void* arg);    // 函数指针，指向一个任务
         void* m_pArg;                   // 函数指针，参数
-        struct tagTask* m_pstNext;                // 指向下一个任务
+        struct tagTask* m_pstNext;      // 指向下一个任务
     } TASK;
 
     class CThreadPool
@@ -25,6 +25,9 @@ namespace MyMessenger
     public:
         int initialize()
         {
+			// 初始化线程池
+			threadpool_init(&m_stPool, MAX_THREAD_COUNT);
+
             m_iIdelCount = 0;
             m_pstThread = NULL;
             pthread_mutex_init(&m_stMutex, NULL);
@@ -38,7 +41,7 @@ namespace MyMessenger
             m_pstThread = new pthread_t[MAX_THREAD_COUNT];
             for (int i = 0; i < MAX_THREAD_COUNT; ++i)
             {
-                if(0 != pthread_create(m_pstThread + i, NULL, routine, (void*)this)) 
+                if(0 != pthread_create(m_pstThread + i, NULL, routine, &m_stPool)) 
                 {
                     delete[] m_pstThread;
                     return -1;
@@ -77,6 +80,8 @@ namespace MyMessenger
             
             delete[] m_pstThread;
             m_pstThread = NULL;
+			
+			threadpool_destroy(&m_stPool);
 
             return 0;
         }
@@ -91,7 +96,7 @@ namespace MyMessenger
                     // 没事情做就休息一下吧
                     // usleep(1000);
                     // continue;
-					wait()
+                    wait();
                     break;
                 }
 
@@ -179,6 +184,7 @@ namespace MyMessenger
         pthread_cond_t m_stCond;       // 条件变量
         TASK* m_pstStart;              // 任务队列起始
         TASK* m_pstEnd;                // 任务队列结束
+        thread_pool m_stPool;          // 线程池
 
     };
 }
