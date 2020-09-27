@@ -22,6 +22,7 @@ int main()
 {
 	CThreadPool pstThreadPool;
 
+<<<<<<< HEAD
     //sleep(1);
 
 	for (int i = 0; i < 10; ++i)
@@ -29,6 +30,20 @@ int main()
 		pstThreadPool.addTask(PrintMyself, (void*)&g_asiArray[i]);
 	}
 
+=======
+    sleep(1);
+
+	for (int i = 0; i < 10; ++i)
+	{
+        // sleep(1);
+		pstThreadPool.addTask(PrintMyself, (void*)&g_asiArray[i]);
+
+       // sleep(1);
+	}
+
+    //sleep(1);
+
+>>>>>>> 589b9e4f97f533f329b387745135ed7a3d518bfb
     while (true)
     {
         if (!pstThreadPool.isEmpty())
@@ -38,10 +53,16 @@ int main()
         }
         else
         {
+<<<<<<< HEAD
             printf("try release\n");
             pstThreadPool.release();
             printf("release sucess\n");
 			break;
+=======
+            printf("try delete sucess\n");
+            pstThreadPool.release();
+            printf("delete sucess\n");
+>>>>>>> 589b9e4f97f533f329b387745135ed7a3d518bfb
         }
     }
 
