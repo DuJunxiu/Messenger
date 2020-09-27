@@ -27,7 +27,7 @@ namespace MyMessenger
     public:
         int initialize()
         {
-            m_iIdelCount = 0;
+            m_iIdelCount = MAX_THREAD_COUNT;
             m_pstThread = NULL;
             pthread_mutex_init(&m_stMutex, NULL);
             pthread_cond_init(&m_stCond, NULL);
@@ -101,19 +101,16 @@ namespace MyMessenger
         // 执行任务
         static void* routine(void* arg)
         {
-			CThreadPool* pstThreadPool = (CThreadPool*)arg;
+            CThreadPool* pstThreadPool = (CThreadPool*)arg;
             while (true)
             {
-                if (NULL == pstThreadPool->m_pstStart)
-                {
-                    // 没事情做就休息一下吧
-                    // usleep(1000);
-                    // continue;
-                    pstThreadPool->wait();
-                    break;
-                }
-
                 pstThreadPool->lock();
+
+                if (pstThreadPool->m_stTaskQueue.empty())
+                {
+                    pstThreadPool->wait();
+                    continue;
+                }
 
                 --pstThreadPool->m_iIdelCount;
 
@@ -122,13 +119,13 @@ namespace MyMessenger
                 pstRoutine->m_pfRun(pstRoutine->m_pArg);
                 delete pstRoutine;
                 pstRoutine = NULL;
-
+                
                 ++pstThreadPool->m_iIdelCount;
+
+                --pstThreadPool->m_iTaskCount;
 
                 pstThreadPool->unlock();
             }
-
-            pstThreadPool->wait();
 
             return NULL;
         }
@@ -137,6 +134,12 @@ namespace MyMessenger
         {
             if (NULL == run)
             {
+                return -1;
+            }
+
+            if (m_iTaskCount >= MAX_WAIT_TASK_COUNT)
+            {
+                TRACELOG("MAX Wait Tasks Count !\n");
                 return -1;
             }
 
@@ -161,6 +164,8 @@ namespace MyMessenger
             {
                 signal();
             }
+            
+            ++m_iTaskCount;
 
             unlock();
 

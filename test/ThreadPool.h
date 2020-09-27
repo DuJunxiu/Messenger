@@ -3,36 +3,36 @@
 #define __THREAD_POOL_H__
 
 #include <pthread.h>
+#include <queue>
 #include <stdio.h>
 
 namespace MyMessenger
 {
-    const int MAX_THREAD_COUNT       =    5;
+    const int MAX_THREAD_COUNT       =    2;
     const int MAX_WAIT_TASK_COUNT    =    1000;
 
     typedef struct tagTask
     {
         void* (*m_pfRun)(void* arg);    // 函数指针，指向一个任务
         void* m_pArg;                   // 函数指针，参数
-        struct tagTask* m_pstNext;      // 指向下一个任务
     } TASK;
 
     class CThreadPool
     {
     public:
-        CThreadPool() {}
-        ~CThreadPool() {}
+        CThreadPool() { initialize(); }
+        ~CThreadPool() { release(); }
 
     public:
         int initialize()
         {
-            m_iIdelCount = 0;
+            bStop = false;
+
+            m_iIdelCount = MAX_THREAD_COUNT;
             m_pstThread = NULL;
             pthread_mutex_init(&m_stMutex, NULL);
             pthread_cond_init(&m_stCond, NULL);
 
-            m_pstStart = NULL;
-            m_pstEnd = NULL;
             m_iTaskCount = 0;
 
             // 创建线程并分离
@@ -51,7 +51,7 @@ namespace MyMessenger
                     return -1;
                 }
 
-				printf("thread %d create sucess\n", m_pstThread[i]);
+                printf("thread %d id %lu\n", i + 1, m_pstThread[i]);
             }
 
             return 0;
@@ -59,25 +59,40 @@ namespace MyMessenger
 
         int release()
         {
+            if (bStop)
+            {
+                return -1;
+            }
+
+            bStop = true;
+
+            // 唤醒所有线程
+            if (m_iIdelCount < MAX_THREAD_COUNT)
+            {
+                broadcast();
+            }
+
+            int i = 0;
+            while (m_pstThread && i < MAX_THREAD_COUNT)
+            {
+                pthread_join(m_pstThread[i], NULL);
+                ++i;
+            }
+
             m_iIdelCount = 0;
             pthread_mutex_destroy(&m_stMutex);
             pthread_cond_destroy(&m_stCond);
 
             // 释放内存
-            if (m_pstStart)
+            for (int i = 0; i < m_stTaskQueue.size(); ++i)
             {
-                TASK* pstTemp = m_pstStart->m_pstNext;
-                while (m_pstStart)
-                {
-                    delete m_pstStart;
-                    m_pstStart = pstTemp;
-                }
+                TASK* pstTemp = m_stTaskQueue.front();
+                m_stTaskQueue.pop();
+                delete pstTemp;
             }
 
-            m_pstStart = NULL;
-            m_pstEnd = NULL;
             m_iTaskCount = 0;
-            
+
             delete[] m_pstThread;
             m_pstThread = NULL;
 
@@ -87,36 +102,56 @@ namespace MyMessenger
         // 执行任务
         static void* routine(void* arg)
         {
-			CThreadPool* pstThreadPool = (CThreadPool*)arg;
+            //printf("routine thread %lu\n", pthread_self());
+
+            CThreadPool* pstThreadPool = (CThreadPool*)arg;
+            if (NULL == pstThreadPool)
+            {
+                return NULL;
+            }
+
             while (true)
             {
-                if (NULL == pstThreadPool->m_pstStart)
+                //printf("before lock thread %lu\n", pthread_self());
+                pstThreadPool->lock();
+                //printf("after lock thread %lu\n", pthread_self());
+
+                if (pstThreadPool->m_stTaskQueue.empty() && !pstThreadPool->bStop)
                 {
-                    // 没事情做就休息一下吧
-                    // usleep(1000);
-                    // continue;
+                    printf("thread %lu is waiting\n", pthread_self());
                     pstThreadPool->wait();
+                }
+
+                if (pstThreadPool->bStop)
+                {
+                    printf("thread %lu is stop\n", pthread_self());
+                    pstThreadPool->unlock();
                     break;
                 }
 
-                pstThreadPool->lock();
+                else if (pstThreadPool->m_stTaskQueue.empty())
+                {
+                    printf("thread %lu is empty\n", pthread_self());
+                    pstThreadPool->unlock();
+                    continue;
+                }
+
+                printf("thread %lu is working\n", pthread_self());
 
                 --pstThreadPool->m_iIdelCount;
-				
-				printf("thread %d is woring\n", pthread_self());
 
-                TASK* pstRoutine = pstThreadPool->m_pstStart;
-                pstThreadPool->m_pstStart = pstThreadPool->m_pstStart->m_pstNext;
+                TASK* pstRoutine = pstThreadPool->m_stTaskQueue.front();
+                pstThreadPool->m_stTaskQueue.pop();
                 pstRoutine->m_pfRun(pstRoutine->m_pArg);
                 delete pstRoutine;
                 pstRoutine = NULL;
 
                 ++pstThreadPool->m_iIdelCount;
 
+                --pstThreadPool->m_iTaskCount;
+
                 pstThreadPool->unlock();
             }
-
-            pstThreadPool->wait();
 
             return NULL;
         }
@@ -128,29 +163,28 @@ namespace MyMessenger
                 return -1;
             }
 
+            if (m_iTaskCount >= MAX_WAIT_TASK_COUNT)
+            {
+                return -1;
+            }
+
             lock();
 
             TASK* pstTask = new TASK;
             pstTask->m_pfRun = run;
             pstTask->m_pArg = arg;
-            pstTask->m_pstNext = NULL;
-            
-            if (NULL == m_pstStart)
-            {
-                m_pstStart = pstTask;
-                m_pstEnd = pstTask;
-            }
-            else
-            {
-                m_pstEnd->m_pstNext = pstTask;
-            }
+
+            m_stTaskQueue.push(pstTask);
+
+            ++m_iTaskCount;
+
+            unlock();
 
             if (m_iIdelCount > 0)
             {
+                printf("add task sucess, try to signal\n");
                 signal();
             }
-
-            unlock();
 
             return 0;
         }
@@ -171,20 +205,34 @@ namespace MyMessenger
             return pthread_cond_signal(&m_stCond);
         }
 
+        // 唤醒所有线程
+        int broadcast()
+        {
+            return pthread_cond_broadcast(&m_stCond);
+        }
+
         // 等待
         int wait()
         {
             return pthread_cond_wait(&m_stCond, &m_stMutex);
         }
 
+        bool isEmpty()
+        {
+            lock();
+            bool bEmpty = m_stTaskQueue.empty();
+            unlock();
+            return bEmpty;
+        }
+
     private:
+        bool bStop;
         int m_iTaskCount;              // 当前队列任务数
         int m_iIdelCount;              // 空闲的线程数
         pthread_t* m_pstThread;        // 管理线程的数组
         pthread_mutex_t m_stMutex;     // 互斥锁
         pthread_cond_t m_stCond;       // 条件变量
-        TASK* m_pstStart;              // 任务队列起始
-        TASK* m_pstEnd;                // 任务队列结束
+        std::queue<TASK*> m_stTaskQueue;        // 任务队列
 
     };
 }
