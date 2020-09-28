@@ -62,15 +62,24 @@ namespace MyMessenger
 
         int release()
         {
+            if (bStop)
+            {
+                return 0;
+            }
+
+            bStop = true;
+
             // 唤醒所有线程
             if (m_iIdelCount < MAX_THREAD_COUNT)
             {
                 broadcast();
             }
 
-            for (int i = 0; i < MAX_THREAD_COUNT - m_iIdelCount; ++i)
+            int i = 0;
+            while (m_pstThread && i < MAX_THREAD_COUNT)
             {
-                wait();
+                pthread_join(m_pstThread[i], NULL);
+                ++i;
             }
 
             m_iIdelCount = 0;
@@ -102,13 +111,29 @@ namespace MyMessenger
         static void* routine(void* arg)
         {
             CThreadPool* pstThreadPool = (CThreadPool*)arg;
-            while (true)
+            if (NULL == pstThreadPool)
+            {
+                return NULL;
+            }
+
+            while (!pstThreadPool->bStop)
             {
                 pstThreadPool->lock();
 
-                if (pstThreadPool->m_stTaskQueue.empty())
+                if (pstThreadPool-isEmpty() && !pstThreadPool->bStop)
                 {
                     pstThreadPool->wait();
+                    continue;
+                }
+
+                if (pstThreadPool->bStop)
+                {
+                    pstThreadPool->unlock();
+                    break;
+                }
+                else if (pstThreadPool->isEmpty())
+                {
+                    pstThreadPool->unlock();
                     continue;
                 }
 
@@ -116,15 +141,16 @@ namespace MyMessenger
 
                 TASK* pstRoutine = pstThreadPool->m_pstStart;
                 pstThreadPool->m_pstStart = pstThreadPool->m_pstStart->m_pstNext;
-                pstRoutine->m_pfRun(pstRoutine->m_pArg);
-                delete pstRoutine;
-                pstRoutine = NULL;
-                
+
                 ++pstThreadPool->m_iIdelCount;
 
                 --pstThreadPool->m_iTaskCount;
 
                 pstThreadPool->unlock();
+
+                pstRoutine->m_pfRun(pstRoutine->m_pArg);
+                delete pstRoutine;
+                pstRoutine = NULL;
             }
 
             return NULL;
@@ -160,18 +186,27 @@ namespace MyMessenger
                 m_pstEnd->m_pstNext = pstTask;
             }
 
-            if (m_iIdelCount > 0)
-            {
-                signal();
-            }
-            
             ++m_iTaskCount;
 
             unlock();
 
+            if (m_iIdelCount > 0)
+            {
+                wakeup();
+            }
+
             return 0;
         }
 
+        bool isEmpty()
+        {
+            lock();
+            bool bEmpty = (NULL == m_pstStart);
+            unlock();
+            return bEmpty;
+        }
+
+    private:
         int lock()
         {
             return pthread_mutex_lock(&m_stMutex);
@@ -183,7 +218,7 @@ namespace MyMessenger
         }
 
         // 唤醒一个线程
-        int signal()
+        int wakeup()
         {
             return pthread_cond_signal(&m_stCond);
         }
@@ -201,6 +236,7 @@ namespace MyMessenger
         }
 
     private:
+        bool bStop;
         int m_iTaskCount;              // 当前队列任务数
         int m_iIdelCount;              // 空闲的线程数
         pthread_t* m_pstThread;        // 管理线程的数组
