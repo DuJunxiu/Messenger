@@ -51,7 +51,7 @@ namespace MyMessenger
 
             m_uiLastTickTime = CTimeUtility::m_uiTime;
         }
-        
+
         int tryWriteLog(const char *pcContent, ...)
         {
             va_list ap;
@@ -68,11 +68,11 @@ namespace MyMessenger
 
             char szDateString[MAX_DATE_TIME_LENGTH];
             CTimeUtility::convertUnixTimeToString(CTimeUtility::m_uiTime, szDateString);
-            
+
             fprintf(m_pFile, "[%s] ", szDateString);
-            
+
             vfprintf(m_pFile, pcContent, ap);
-            
+
             fflush(m_pFile);
 
             return 0;
@@ -88,7 +88,7 @@ namespace MyMessenger
                 CTimeUtility::makeTime_ymd(CTimeUtility::m_uiTime, iYear, iMonth, iDay);
 
                 // 正确的文件名
-                snprintf(m_szFileName, MAX_FILE_NAME_LENGTH - 1, "log_%04d_%02d_%02d.log", iYear, iMonth, iDay);
+                snprintf(m_szFileName, MAX_FILE_NAME_LENGTH - 1, "log_%04d-%02d-%02d.log", iYear, iMonth, iDay);
                 m_szFileName[MAX_FILE_NAME_LENGTH - 1] = '\0';
 
                 m_pFile = fopen(m_szFileName, "a+");
@@ -104,7 +104,7 @@ namespace MyMessenger
         unsigned int m_uiLastTickTime;              // 上次tick的时间戳
     };
 
-    // 一个日志玩家管理类的单例
+    // 一个日志文件管理类的实例
     typedef CSingleton<CLogFileManager> logManagerSingleton;
 
     // 无条件强制打印日志

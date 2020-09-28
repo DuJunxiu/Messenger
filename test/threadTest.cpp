@@ -22,19 +22,10 @@ int main()
 {
     CThreadPool pstThreadPool;
 
-<<<<<<< HEAD
-    //sleep(1);
-
-    for (int i = 0; i < 10; ++i)
-    {
-        pstThreadPool.addTask(PrintMyself, (void*)&g_asiArray[i]);
-    }
-=======
 	for (int i = 0; i < 10; ++i)
 	{
 		pstThreadPool.addTask(PrintMyself, (void*)&g_asiArray[i]);
 	}
->>>>>>> 0eee8773ff64a3c80984c0893d9856edfd0ca2a1
 
     while (true)
     {
