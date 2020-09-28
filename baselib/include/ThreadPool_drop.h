@@ -14,7 +14,7 @@ namespace MyMessenger
     typedef struct tagTask
     {
         void* (*m_pfRun)(void*);        // 函数指针，指向一个任务
-        void* m_pArg;                   // 函数指针，参数
+        void* m_pArg;                   // 函数参数
         struct tagTask* m_pstNext;      // 指向下一个任务结构
     } TASK;
 
@@ -64,6 +64,7 @@ namespace MyMessenger
         {
             if (bStop)
             {
+				// 避免多次 delete
                 return 0;
             }
 
@@ -120,17 +121,18 @@ namespace MyMessenger
             {
                 pstThreadPool->lock();
 
-                if (pstThreadPool-isEmpty() && !pstThreadPool->bStop)
+                while (pstThreadPool-isEmpty() && !pstThreadPool->bStop)
                 {
                     pstThreadPool->wait();
-                    continue;
                 }
 
+				// 收到 stop 命令了
                 if (pstThreadPool->bStop)
                 {
                     pstThreadPool->unlock();
                     break;
                 }
+				// 任务队列为空
                 else if (pstThreadPool->isEmpty())
                 {
                     pstThreadPool->unlock();
