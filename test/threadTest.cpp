@@ -22,8 +22,6 @@ int main()
 {
 	CThreadPool pstThreadPool;
 
-    //sleep(1);
-
 	for (int i = 0; i < 10; ++i)
 	{
 		pstThreadPool.addTask(PrintMyself, (void*)&g_asiArray[i]);
@@ -45,6 +43,6 @@ int main()
         }
     }
 
-	return 0;
+    return 0;
 }
 
