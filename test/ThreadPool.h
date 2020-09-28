@@ -14,7 +14,7 @@ namespace MyMessenger
     typedef struct tagTask
     {
         void* (*m_pfRun)(void* arg);    // 函数指针，指向一个任务
-        void* m_pArg;                   // 函数指针，参数
+        void* m_pArg;                   // 函数参数
     } TASK;
 
     class CThreadPool
