@@ -61,7 +61,7 @@ namespace MyMessenger
         {
             if (bStop)
             {
-				// 避免重复 delete
+                // 避免重复 delete
                 return 0;
             }
 
@@ -123,14 +123,14 @@ namespace MyMessenger
                     pstThreadPool->wait();
                 }
 
-				// 收到 stop 命令了
+                // 收到 stop 命令了
                 if (pstThreadPool->bStop)
                 {
                     // printf("thread %lu is stop\n", pthread_self());
                     pstThreadPool->unlock();
                     break;
                 }
-				// 任务队列为空
+                // 任务队列为空
                 else if (pstThreadPool->m_stTaskQueue.empty())
                 {
                     // printf("thread %lu is empty\n", pthread_self());
@@ -231,11 +231,11 @@ namespace MyMessenger
 
     private:
         bool bStop;
-        int m_iTaskCount;						// 当前队列任务数
-        int m_iIdelCount;						// 空闲的线程数
-        pthread_t* m_pstThread;					// 管理线程的数组
-        pthread_mutex_t m_stMutex;				// 互斥锁
-        pthread_cond_t m_stCond;				// 条件变量
+        int m_iTaskCount;                       // 当前队列任务数
+        int m_iIdelCount;                       // 空闲的线程数
+        pthread_t* m_pstThread;                 // 管理线程的数组
+        pthread_mutex_t m_stMutex;              // 互斥锁
+        pthread_cond_t m_stCond;                // 条件变量
         std::queue<TASK*> m_stTaskQueue;        // 任务队列
 
     };

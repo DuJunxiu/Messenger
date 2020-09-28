@@ -64,7 +64,7 @@ namespace MyMessenger
         {
             if (bStop)
             {
-				// 避免多次 delete
+                // 避免多次 delete
                 return 0;
             }
 
@@ -126,13 +126,13 @@ namespace MyMessenger
                     pstThreadPool->wait();
                 }
 
-				// 收到 stop 命令了
+                // 收到 stop 命令了
                 if (pstThreadPool->bStop)
                 {
                     pstThreadPool->unlock();
                     break;
                 }
-				// 任务队列为空
+                // 任务队列为空
                 else if (pstThreadPool->isEmpty())
                 {
                     pstThreadPool->unlock();
