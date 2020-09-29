@@ -3,6 +3,7 @@
 #define __DB_OPERATE_HPP__
 
 #include <mysql/mysql.h>
+#include <string>
 
 #include "LogDeal.hpp"
 
@@ -17,8 +18,15 @@ public:
 public:
     int initialize();
 
+    int open(const string& strHost, const string& strUser, const string& strPassword, const string& strDBName);
+
+    int close();
+
+    int excute(const string& strSql);
+
 private:
-    MYSQL* m_pstMysql;
+    MYSQL* m_pstMysql;      // 
+    MYSQL_RES* m_pstResult; // 结果集
 
 };
 
