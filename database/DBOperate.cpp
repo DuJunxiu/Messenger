@@ -13,7 +13,7 @@ int CDBOperate::initialize()
     return 0;
 }
 
-int CDBOperate::open(const string& strHost, const string& strUser, const string& strPassword, const string& strDBName)
+int CDBOperate::open(const std::string& strHost, const std::string& strUser, const std::string& strPassword, const std::string& strDBName)
 {
     // 数据库连接
     m_pstMysql = mysql_real_connect(m_pstMysql.c_str(), strHost.c_str(), strUser.c_str(), strPassword.c_str(), strDBName.c_str(), 0, NULL, 0);
@@ -37,7 +37,7 @@ int CDBOperate::close()
     return 0;
 }
 
-int CDBOperate::excute(const string& strSql)
+int CDBOperate::excute(const std::string& strSql)
 {
     if (strSql.size() <= 0)
     {

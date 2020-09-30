@@ -1,4 +1,6 @@
 
+// https://dev.mysql.com/doc/dev/mysql-server/latest/mysql_8h_source.html
+
 #ifndef __DB_OPERATE_HPP__
 #define __DB_OPERATE_HPP__
 
@@ -18,11 +20,11 @@ public:
 public:
     int initialize();
 
-    int open(const string& strHost, const string& strUser, const string& strPassword, const string& strDBName);
+    int open(const std::string& strHost, const std::string& strUser, const std::string& strPassword, const std::string& strDBName);
 
     int close();
 
-    int excute(const string& strSql);
+    int excute(const std::string& strSql);
 
 private:
     MYSQL* m_pstMysql;      // 
