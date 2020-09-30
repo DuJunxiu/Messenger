@@ -29,7 +29,7 @@ public:
     int open(const std::string& strHost, const std::string& strUser, const std::string& strPassword, const std::string& strDBName)
     {
         // 数据库连接
-        m_pstMysql = mysql_real_connect(m_pstMysql->c_str(), strHost.c_str(), strUser.c_str(), strPassword.c_str(), strDBName.c_str(), 0, NULL, 0);
+        m_pstMysql = mysql_real_connect(m_pstMysql, strHost.c_str(), strUser.c_str(), strPassword.c_str(), strDBName.c_str(), 0, NULL, 0);
         if (NULL == m_pstMysql)
         {
             printf("connect to DB failed !\n");
