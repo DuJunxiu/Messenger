@@ -16,9 +16,9 @@ int main()
 
     pstDBOperate->open("localhost", "root", "123456", "student");
 
-    pstDBOperate->excute("insert into student_info values(\"20200102\", \"李梅\", 17, \"女\", 3, 499)", 1);
+    pstDBOperate->execute("insert into student_info values(\"20200102\", \"李梅\", 17, \"女\", 3, 499)", 1);
 
-    pstDBOperate->excute("select * from student_info");
+    pstDBOperate->execute("select * from student_info");
 
     pstDBOperate->close();
 

@@ -24,7 +24,7 @@ public:
 
     int close();
 
-    int excute(const std::string& strSql);
+    int execute(const std::string& strSql);
 
 private:
     MYSQL* m_pstMysql;      // 

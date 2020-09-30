@@ -37,17 +37,17 @@ int CDBOperate::close()
     return 0;
 }
 
-int CDBOperate::excute(const std::string& strSql)
+int CDBOperate::execute(const std::string& strSql)
 {
     if (strSql.size() <= 0)
     {
-        TRACELOG("excute error, strSql size error !\n");
+        TRACELOG("execute error, strSql size error !\n");
         return -1;
     }
 
     if (NULL == m_pstMysql)
     {
-        TRACELOG("excute error, m_pstMysql is NULL !\n");
+        TRACELOG("execute error, m_pstMysql is NULL !\n");
         return -1;
     }
 
@@ -61,7 +61,7 @@ int CDBOperate::excute(const std::string& strSql)
     // 执行语句失败
     if (0 != mysql_query(m_pstMysql, strSql.c_str()))
     {
-        TRACELOG("excute [%s] failed\n", strSql.c_str());
+        TRACELOG("execute [%s] failed\n", strSql.c_str());
         return -1;
     }
 

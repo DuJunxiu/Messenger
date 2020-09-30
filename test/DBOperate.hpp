@@ -54,17 +54,17 @@ public:
         return 0;
     }
 
-    int excute(const std::string& strSql, char cType = 0)
+    int execute(const std::string& strSql, char cType = 0)
     {
         if (strSql.size() <= 0)
         {
-            printf("excute error, strSql size error !\n");
+            printf("execute error, strSql size error !\n");
             return -1;
         }
 
         if (NULL == m_pstMysql)
         {
-            printf("excute error, m_pstMysql is NULL !\n");
+            printf("execute error, m_pstMysql is NULL !\n");
             return -1;
         }
 
@@ -75,12 +75,12 @@ public:
             m_pstResult = NULL;
         }
 
-        printf("start excute [%s]\n", strSql.c_str());
+        printf("start execute [%s]\n", strSql.c_str());
 
         // 执行语句失败
         if (0 != mysql_query(m_pstMysql, strSql.c_str()))
         {
-            printf("excute [%s] failed\n", strSql.c_str());
+            printf("execute [%s] failed\n", strSql.c_str());
             return -1;
         }
 
@@ -90,7 +90,7 @@ public:
             // 执行结果
             m_pstResult = mysql_use_result(m_pstMysql);
 
-            printf("excute result :\n");
+            printf("execute result :\n");
 
             MYSQL_ROW stRow;
             // mysql_field_count() 返回查询结果的列数
@@ -116,7 +116,7 @@ public:
             mysql_free_result(m_pstResult);
         }
 
-        printf("excute OK !\n");
+        printf("execute OK !\n");
 
         return 0;
     }
