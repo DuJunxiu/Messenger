@@ -35,7 +35,7 @@ int CSharedMemory::destory()
     {
         return 0;
     }
-    
+
     return shmctl(m_iShmID, IPC_RMID, NULL);
 }
 

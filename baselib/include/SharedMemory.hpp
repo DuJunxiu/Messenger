@@ -22,10 +22,10 @@ public:
     int allocateShmSpace(int iSize = 4096, int iFlag = IPC_CREAT|IPC_EXCL|0666);
 
     // 
-    const char* getInitAdress();
+    const char* getInitAdress() const;
 
     // 
-    const char* getFreeAdress();
+    const char* getFreeAdress() const;
 
     // 
     int setFreeAdress(int iSize);
