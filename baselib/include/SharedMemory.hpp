@@ -2,7 +2,7 @@
 #ifndef __SHARED_MEMORY_HPP__
 #define __SHARED_MEMORY_HPP__
 
-const char* SHM_KEY_FILE = "../../tmp";
+const char* SHM_KEY_FILE = "../../tmp/key.txt";
 
 class CSharedMemory
 {
@@ -17,6 +17,8 @@ private:
 
 public:
     key_t getShmKey();
+
+    int getShmID();
 
     // 申请分配共享内存空间
     int allocateShmSpace(int iSize = 4096, int iFlag = IPC_CREAT|IPC_EXCL|0666);

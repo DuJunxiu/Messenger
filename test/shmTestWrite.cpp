@@ -1,6 +1,6 @@
 
 #include <string.h>
-
+#include <unistd.h>
 #include "SharedMemory.hpp"
 
 int main()
@@ -21,7 +21,7 @@ int main()
         return -1;
     }
 
-    int* piCount = (int*)pstShm->getFreeAdress();
+    int* piCount = (int*)pstShm->getFreeAddress();
     if (NULL == piCount)
     {
         printf("piCount is NULL\n");
@@ -29,28 +29,33 @@ int main()
     }
 
     *piCount = 0;
-    pstShm->setFreeAdress(sizeof(*piCount));
+    pstShm->setFreeAddress(sizeof(*piCount));
+
+    sleep(5);
 
     while (*piCount <= 5)
     {
-        const char* pFreeAdress = pstShm->getFreeAdress();
-        if (NULL == pFreeAdress)
+        const char* pFreeAddress = pstShm->getFreeAddress();
+        if (NULL == pFreeAddress)
         {
-            printf("pFreeAdress is NULL\n");
+            printf("pFreeAddress is NULL\n");
             break;
         }
 
-        ShmTest* pstTest = (ShmTest*)pFreeAdress;
+        ShmTest* pstTest = (ShmTest*)pFreeAddress;
         if (NULL == pstTest)
         {
             break;
         }
 
-        pstTest->m_acBuffer = "Hello World ";
-        pstShm->setFreeAdress(sizeof(ShmTest));
+        strncpy(pstTest->m_acBuffer, "Hello World", 32);
+
+        printf("write in  shm : %d ---> %d: %s\n", pstShm->getShmID(), *piCount, pstTest->m_acBuffer);
+
+        pstShm->setFreeAddress(sizeof(ShmTest));
         ++(*piCount);
 
-        sleep(1000);
+        sleep(1);
     }
 
     pstShm->destory();

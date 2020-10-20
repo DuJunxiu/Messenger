@@ -8,24 +8,24 @@
 
 struct ShmTest
 {
-	char m_acBuffer[32];
+    char m_acBuffer[32];
 };
 
-const char* SHM_KEY_FILE = "../../tmp";
+const char* SHM_KEY_FILE = "./tmp.txt";
 
 class CSharedMemory
 {
 public:
-    CSharedMemory();
-    ~CSharedMemory();
+    CSharedMemory() {}
+    ~CSharedMemory() {}
 
-private:
+public:
     int initialize()
     {
         m_uiShmKey = 0;
         m_iShmID = 0;
         m_iFreeOffset = 0;
-        m_pShmAdress = NULL;
+        m_pShmAddress = NULL;
 
         printf("----- initialize -----\n");
 
@@ -47,10 +47,12 @@ private:
 public:
     key_t getShmKey() { return m_uiShmKey; }
 
+    int getShmID() { return m_iShmID; }
+
     // 申请分配共享内存空间
     int allocateShmSpace(int iSize = 4096, int iFlag = IPC_CREAT|IPC_EXCL|0666)
     {
-        key_t m_uiShmKey = ftok(SHM_KEY_FILE, 255);
+        key_t m_uiShmKey = ftok(SHM_KEY_FILE, 10086);
         if (m_uiShmKey < 0)
         {
             printf("allocate shm space error, ftok failed\n");
@@ -64,8 +66,8 @@ public:
             return -1;
         }
 
-        m_pShmAdress = (char*)shmat(m_iShmID, NULL, 0);
-        if (NULL == m_pShmAdress)
+        m_pShmAddress = (char*)shmat(m_iShmID, NULL, 0);
+        if (NULL == m_pShmAddress)
         {
             printf("allocate shm space error, shmat failed\n");
             return -1;
@@ -77,13 +79,13 @@ public:
     }
 
     // 
-    const char* getInitAdress() { return m_pShmAdress; }
+    const char* getInitAddress() { return m_pShmAddress; }
 
     // 
-    const char* getFreeAdress() { return m_pShmAdress + m_iFreeOffset; }
+    const char* getFreeAddress() { return m_pShmAddress + m_iFreeOffset; }
 
     // 
-    int setFreeAdress(int iSize)
+    int setFreeAddress(int iSize)
     {
         if (iSize <= 0)
         {
@@ -103,11 +105,11 @@ public:
     }
 
 private:
-    key_t m_uiShmKey;   // 
-    int m_iShmID;       // 
-    int m_iShmSize;     // 
-    int m_iFreeOffset;  // 空闲的偏移量
-    char* m_pShmAdress; // 指向共享内存第一个字节地址的指针
+    key_t m_uiShmKey;       // 
+    int m_iShmID;           // 
+    int m_iShmSize;         // 
+    int m_iFreeOffset;      // 空闲的偏移量
+    char* m_pShmAddress;    // 指向共享内存第一个字节地址的指针
 };
 
 #endif
