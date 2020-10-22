@@ -1,7 +1,4 @@
 
-#ifndef __LAUNCHER_CPP__
-#define __LAUNCHER_CPP__
-
 #include "EventLoop.hpp"
 #include "ThreadPool.hpp"
 
@@ -24,4 +21,3 @@ int main()
 	return 0;
 }
 
-#ednif

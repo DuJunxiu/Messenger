@@ -6,7 +6,6 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include "LogDeal.hpp"
 #include "TimeUtility.h"
 #include "Singleton.h"
 
@@ -14,7 +13,7 @@ namespace MyMessenger
 {
     const int MAX_DATE_TIME_LENGTH = 32;
     const int MAX_FILE_NAME_LENGTH = 64;
-    const char* LOG_PATH = "../../log/";
+    const char* LOG_PATH = "../log/";
 
     class CLogFileManager
     {
