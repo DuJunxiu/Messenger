@@ -52,7 +52,7 @@ public:
     // 申请分配共享内存空间
     int allocateShmSpace(int iSize = 4096, int iFlag = IPC_CREAT|IPC_EXCL|0666)
     {
-        key_t m_uiShmKey = ftok(SHM_KEY_FILE, 10086);
+        key_t m_uiShmKey = ftok(SHM_KEY_FILE, 110);
         if (m_uiShmKey < 0)
         {
             printf("allocate shm space error, ftok failed\n");

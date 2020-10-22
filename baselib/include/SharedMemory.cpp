@@ -52,7 +52,7 @@ int CSharedMemory::getShmID()
 // 申请分配共享内存空间
 int CSharedMemory::allocateShmSpace(int iSize, int iFlag)
 {
-    key_t m_uiShmKey = ftok(SHM_KEY_FILE, 10086);
+    key_t m_uiShmKey = ftok(SHM_KEY_FILE, 110);
     if (m_uiShmKey < 0)
     {
         TRACELOG("allocate shm space error, ftok failed\n");
