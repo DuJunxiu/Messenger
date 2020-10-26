@@ -9,24 +9,24 @@ using namespace MyMessenger;
 class CEventLoop
 {
 public:
-	CEventLoop() {}
-	~CEventLoop() {}
+    CEventLoop() {}
+    ~CEventLoop() {}
 
 public:
-	// 初始化
-	int initialize();
+    // 初始化
+    int initialize();
 
-	// 释放
-	int release();
+    // 释放
+    int release();
 
-	// 
-	int routine();
+    // 
+    int routine();
 
-	// 定时器
-	void OnTick();
+    // 定时器
+    void OnTick();
 
 private:
-	static int m_iCommand;
+    static int m_iCommand;
 
 };
 

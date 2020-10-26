@@ -2,6 +2,9 @@
 #ifndef __HANDLER_HPP__
 #define __HANDLER_HPP__
 
+#include "Protocol.hpp"
+#include "RoleObj.hpp"
+
 class CHandler
 {
 public:
