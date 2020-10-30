@@ -1,5 +1,5 @@
 
-#include "ProtocolDeal"
+#include "ProtocolDeal.hpp"
 
 CProtocolDeal::CProtocolDeal()
 {}

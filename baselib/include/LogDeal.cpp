@@ -68,7 +68,7 @@ int CLogFileManager::writeLog(const char *pcContent, va_list& ap)
 {
     checkLogFile();
 
-    char szDateString[MAX_DATETIME_LENGTH];
+    char szDateString[MAX_DATE_TIME_LENGTH];
     CTimeUtility::convertUnixTimeToString(CTimeUtility::m_uiTime, szDateString);
 
     fprintf(m_pFile, "[%s] ", szDateString);

@@ -37,7 +37,6 @@ namespace MyMessenger
     private:
         FILE* m_pFile;                              // 文件指针
         char m_szFileName[MAX_FILE_NAME_LENGTH];    // 文件名
-
         unsigned int m_uiLastTickTime;              // 上次tick的时间戳
     };
 

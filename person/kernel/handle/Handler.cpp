@@ -5,7 +5,7 @@ CHandler::CHandler()
 {
     m_pstRoleObj = NULL;
     m_pstReqMsg = NULL;
-    m_iMsgID = -1;
+    // m_iMsgID = -1;
 }
 
 // void CHandler::setMsgID(int iMsgID)
