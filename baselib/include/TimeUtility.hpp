@@ -32,8 +32,8 @@ namespace MyMessenger
                 return -2;
             }
 
-            sprintf(szString, "%04d-%02d-%02d %02d:%02d:%02d",
-                pTempTm->tm_year + 1900, pTempTm->tm_mon + 1, pTempTm->tm_mday,
+            sprintf(szString, "%04d-%02d-%02d %02d:%02d:%02d", 
+                pTempTm->tm_year + 1900, pTempTm->tm_mon + 1, pTempTm->tm_mday, 
                 pTempTm->tm_hour, pTempTm->tm_min, pTempTm->tm_sec);
 
             return 0;

@@ -18,8 +18,8 @@ public:
     CHandler* getHandler(const unsigned int uiMsgID);
 
 private:
-    // 类指针数组，便于调用对应主协议的消息处理对象
-    static CHandler* m_apHandler[MAX_HANDLER_COUNT];
+    // 类对象指针数组，便于调用对应主协议的消息处理对象
+    static CHandler* m_apHandler[MAX_MSGID_COUNT];
 
 };
 

@@ -1,7 +1,7 @@
 
 #include "HandlerFactory.hpp"
 
-CHandler* CHandlerFactory::m_apHandler[MAX_HANDLER_COUNT];
+CHandler* CHandlerFactory::m_apHandler[MAX_MSGID_COUNT];
 
 CHandlerFactory::CHandlerFactory()
 {}
@@ -11,7 +11,7 @@ CHandlerFactory::~CHandlerFactory()
 
 void CHandlerFactory::registerHandler(const unsigned int uiMsgID, const CHandler* pHandler)
 {
-    if (uiMsgID > MAX_HANDLER_COUNT)
+    if (uiMsgID > MAX_MSGID_COUNT)
     {
         TRACELOG("Error MsgID : %u\n", uiMsgID);
         return;
@@ -35,7 +35,7 @@ void CHandlerFactory::registerHandler(const unsigned int uiMsgID, const CHandler
 
 CHandler* CHandlerFactory::getHandler(const unsigned int uiMsgID)
 {
-    if (uiMsgID > MAX_HANDLER_COUNT)
+    if (uiMsgID > MAX_MSGID_COUNT)
     {
         TRACELOG("Error MsgID : %u\n", uiMsgID);
         return;

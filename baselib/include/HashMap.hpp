@@ -12,7 +12,7 @@ const int MAX_NODE_IN_ONE_LIST_COUNT = 64;  // 链表的长度
 template <class T>
 struct NodeInfo
 {
-    T stObj;        // 存放的对象
+    T m_stObj;      // 存放的对象
     char m_cStatus; // 是否被使用 0未使用 1已使用
 };
 
