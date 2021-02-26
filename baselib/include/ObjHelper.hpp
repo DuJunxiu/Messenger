@@ -6,7 +6,15 @@ namespace MyMessenger
 {
     // 对象分配器
     class CObjAllocator
-    {};
+    {
+    private:
+        CObjAllocator() {}
+    public:
+        static CObjAllocator* onCreateOByShm()
+        {
+            return nullptr;
+        }
+    };
 
     // 对象操作器
     template<typename T>
