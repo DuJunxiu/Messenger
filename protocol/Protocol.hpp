@@ -43,7 +43,47 @@ typedef struct stMainMsg
 
 /////////////////////////////////////////////////////////////////////
 //////////////////////////// 子协议结构 /////////////////////////////
+typedef struct stOneGroupMsg
+{
+    int m_iUserID;
+    char cMsgType;              // 1文字消息 2图片消息 3文件消息
+    char* pszMsgInfo[1024];
+} OneGroupMsg;
 
+typedef struct stGroup
+{
+    unsigned short m_usMsgCount;
+    OneGroupMsg m_stMsgList[1000];
+} Group;
+/////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////
+//////////////////////////// 入库的结构 /////////////////////////////
+typedef struct stDBRoleInfo
+{
+    int m_iUsrerID;
+    unsigned int m_uiCreateTime;            // 用户创建时间
+} DBRoleInfo;
+
+typedef struct stDBMemberInfo
+{
+} DBMemberInfo;
+
+typedef struct stDBGroupInfo
+{
+    int m_iGroupID;
+    int m_iOwnerID;
+    unsigned int m_uiCreateTime;            // 群创建时间
+    unsigned int m_uiLastActiveTime;        // 最后活跃时间
+    unsigned short m_usMemberCount;
+    DBMemberInfo m_stOneMemberInfo[1000];
+} DBGroupInfo;
+
+typedef struct stDBGroupMsgList
+{
+    unsigned short m_usMemberCount;
+    OneGroupMsg m_stOneMsgInfo[1000];
+} DBGroupMsgList;
 /////////////////////////////////////////////////////////////////////
 
 #endif

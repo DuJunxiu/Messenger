@@ -51,7 +51,7 @@ namespace MyMessenger
 
             return 0;
         }
-        
+
         // 比较两个时间戳是否为同一天
         static bool isSameDay(time_t uiTime1, time_t uiTime2)
         {

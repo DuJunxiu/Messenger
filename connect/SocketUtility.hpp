@@ -11,7 +11,7 @@
 namespace MyMessenger
 {
     const int MAX_LISTEN_SOCKET_COUNT = 5;
-    
+
     class CSocketUtility
     {
     public:

@@ -16,12 +16,17 @@ struct NodeInfo
     char m_cStatus; // 是否被使用 0未使用 1已使用
 };
 
-// 哈希管理器，主要用来存放对象
+// 哈希管理器，主要用来管理存放的对象
 class CHashMap
 {
 public:
     CHashMap();
     ~CHashMap();
+
+    CHashMap(int iCount);
+
+public:
+    static CHashMap* onCreateHashMap(char* pShmAdress, int iCount);
 
 public:
     int getHashMapBitSize();

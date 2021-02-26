@@ -8,8 +8,8 @@ namespace MyMessenger
 	const int SERVER_START		= 1;
 	const int SERVER_STOP		= 2;
 	const int SERVER_RELOAD		= 3;
-	
-	CUtility
+
+	class CUtility
 	{};
 }
 

@@ -32,7 +32,7 @@ namespace MyMessenger
         T m_iInstance;
         static CSingleton<T>* m_pInstance;
     };
-    
+
     template<class T>
     CSingleton<T>* CSingleton<T>::m_pInstance = NULL;
 }
