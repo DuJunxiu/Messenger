@@ -18,6 +18,9 @@ public:
     int onGetGroupManagerUID() { return m_stGroupInfo.m_iManagerUID; }
     const DBGroupInfo& onGetGroupInfo() { return m_stGroupInfo; }
 
+    // 是否是群组成员
+    bool checkIsGroupMember();
+
 private:
     DBGroupInfo m_stGroupInfo;
 
