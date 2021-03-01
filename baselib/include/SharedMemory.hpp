@@ -23,7 +23,7 @@ public:
     // #define IPC_CREAT    01000    /* Create key if key does not exist. */
     // #define IPC_EXCL     02000    /* Fail if key exists.  */
     // 申请分配共享内存空间
-    int allocateShmSpace(int iSize = 4096, int iFlag = IPC_CREAT|IPC_EXCL|0666);
+    int allocateShmSpace(int iID = 110, int iSize = 4096, int iFlag = IPC_CREAT|IPC_EXCL|0666);
 
     // 
     const char* getInitAdress() const;
