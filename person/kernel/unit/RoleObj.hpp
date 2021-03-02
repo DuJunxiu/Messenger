@@ -12,6 +12,7 @@ class CRoleObj : public CObj
 {
 public:
     virtual int initialize();
+    DECLARE_DYN
 
 private:
     DBRoleInfo m_stRoleInfo;

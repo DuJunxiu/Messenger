@@ -12,6 +12,7 @@ class CGroupObj : public CObj
 {
 public:
     virtual int initialize();
+    DECLARE_DYN
 
 public:
     int onGetGroupID() { return m_stGroupInfo.m_iGroupID; }

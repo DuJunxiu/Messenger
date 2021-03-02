@@ -10,6 +10,8 @@
 namespace MyMessenger
 {
 
+    class CObj;
+
     typedef enum enmIdxUseFlag
     {
         EIUF_FREE = 0, //该对象未被使用
@@ -73,27 +75,7 @@ namespace MyMessenger
     ////////////////////////////////////////////////////////////////////////////
 
 
-    // 对象基类
-    class CObj
-    {
-    public:
-        CObj() {}
-        virtual ~CObj() {}
-
-    public:
-        virtual int initialize() = 0;
-
-        void setObjectID(int iObjectID) { m_iObjectID = iObjectID; }
-        int getObjectID() { return m_iObjectID; }
-    private:
-        int m_iObjectID;    // 对象ID，用于一条链表上的索引
-    };
-
-
-    ////////////////////////////////////////////////////////////////////////////
-
-
-    // typedef CObj* (*Function_CreateObject)(void*);
+    typedef CObj* (*Function_CreateObject)(void*);
 
     // 对象分配器
     class CObjAllocator
@@ -167,6 +149,17 @@ namespace MyMessenger
                 }
             }
 
+            CObj* pstObject = m_astIndex[iInsertIdx].GetAttachedObj();
+            if (nullptr == pstObject)
+            {
+                return -3;
+            }
+
+            memset(pstObject, 0, m_uiObjSize);
+            (*m_pfCreateObject)((char*)pstObject);
+            pstObject->setObjectID(iInsertIdx);
+            pstObject->initialize();
+
             ++m_iUsedCount;
 
             return iInsertIdx;
@@ -183,12 +176,13 @@ namespace MyMessenger
         }
 
     private:
-        CIdx* m_astIndex;               // 索引数组，用于管理对象链表
-        int m_iUsedCount;               // 已用对象数
-        int m_iMaxObjCount;             // 最大对象数
-        size_t m_uiObjSize;             // 单个对象大小
-        int m_iFreeHeadIndex;           // 空闲的头索引
-        int m_iFreeTailIndex;           // 空闲的尾索引
+        CIdx* m_astIndex;                           // 索引数组，用于管理对象链表
+        int m_iUsedCount;                           // 已用对象数
+        int m_iMaxObjCount;                         // 最大对象数
+        size_t m_uiObjSize;                         // 单个对象大小
+        int m_iFreeHeadIndex;                       // 空闲的头索引
+        int m_iFreeTailIndex;                       // 空闲的尾索引
+        Function_CreateObject m_pfCreateObject;     // 在内存上创建CObj对象的函数，每个子类需要自己实现
     };
 
 
@@ -211,6 +205,49 @@ namespace MyMessenger
 
     template<typename OBJECT_TYPE>
     std::hash_map<int , OBJECT_TYPE>* CObjHelper<OBJECT_TYPE>::m_pstHashMap = nullptr;
+
+
+    ////////////////////////////////////////////////////////////////////////////
+
+
+    // 对象基类
+    class CObj
+    {
+    public:
+        CObj() {}
+        virtual ~CObj() {}
+
+    public:
+        virtual int initialize() = 0;
+
+        void setObjectID(int iObjectID) { m_iObjectID = iObjectID; }
+        int getObjectID() { return m_iObjectID; }
+    private:
+        int m_iObjectID;    // 对象ID，用于一条链表上的索引
+    };
+
+
+    #define DECLARE_DYN                                                          \
+        public:                                                                  \
+            void* operator new(size_t uiSize, const void* pThis) throw();        \
+            static CObj* CreateObject(void* pMem);
+
+
+    #define IMPLEMENT_DYN(class_name)                                            \
+        void* class_name::operator new(size_t uiSize, const void* pThis) throw() \
+        {                                                                        \
+            if(!pThis)                                                           \
+            {                                                                    \
+                return NULL;                                                     \
+            }                                                                    \
+                                                                                 \
+            return (void*)pThis;                                                 \
+        }                                                                        \
+                                                                                 \
+        CObj* class_name::CreateObject( void *pMem )                             \
+        {                                                                        \
+            return (CObj*)new(pMem) class_name;                                  \
+        }
 
 }
 
