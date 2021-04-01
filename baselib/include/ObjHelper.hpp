@@ -3,6 +3,7 @@
 #define __OBJ_HELPER_HPP__
 
 #include <list>
+#include <unordered_map>
 #include <hash_map>
 #include "SharedMemory.hpp"
 // #include "HashMap.hpp"
@@ -44,7 +45,7 @@ namespace MyMessenger
         inline void SetUsed() { m_iUseFlag = EIUF_USED; }
 
         // 判断对象是否已被使用
-        inline int IsUsed() const { return m_iUseFlag == EIUF_USED; }
+        inline bool IsUsed() const { return m_iUseFlag == EIUF_USED; }
 
         // 获取所在链表下一个索引
         inline int GetNextIdx() const { return m_iNextIdx; }
@@ -167,13 +168,81 @@ namespace MyMessenger
 
         int onDestoryObject(int iObjectID)
         {
+            if (iObjectID < 0 || iObjectID >= m_iMaxObjCount)
+            {
+                return -1;
+            }
+
+            if (!m_astIndex[iObjectID].IsUsed())
+            {
+                return -1;
+            }
+
+            int iPrevIdx = m_astIndex[iObjectID].GetPrevIdx();
+            int iNextIdx = m_astIndex[iObjectID].GetNextIdx();
+
+            if (iPrevIdx >= 0)
+            {
+                m_astIndex[iPrevIdx].SetNextIdx(iNextIdx);
+            }
+            if (iNextIdx >= 0)
+            {
+                m_astIndex[iNextIdx].SetPrevIdx(iPrevIdx);
+            }
+
+            m_astIndex[iObjectID].SetFree();
+            m_astIndex[iObjectID].SetPrevIdx(-1);
+            m_astIndex[iObjectID].SetNextIdx(-1);
+
+            --m_iUsedCount;
+
             return 0;
         }
 
         CObj* getObjByID(int iObjectID)
         {
-            return nullptr;
+            if (nullptr == m_astIndex)
+            {
+                return nullptr;
+            }
+
+            if (iObjectID < 0 || iObjectID >= m_iMaxObjCount)
+            {
+                return nullptr;
+            }
+
+            if (!m_astIndex[iObjectID].IsUsed())
+            {
+                return nullptr;
+            }
+
+            return m_astIndex[iObjectID].GetAttachedObj();
         }
+
+        CObj* getNextObj(int iObjectID)
+        {
+            if(iObjectID < 0 || iObjectID >= m_iMaxObjCount)
+            {
+                return NULL;
+            }
+
+            if(!m_astIndex[iObjectID].IsUsed())
+            {
+                return NULL;
+            }
+
+            CIdx* pIdx = &m_astIndex[iObjectID];
+            if (NULL == pIdx)
+            {
+                return NULL;
+            }
+
+            int iNextObjIdx = pIdx->GetNextIdx();
+
+            return getObjByID(iNextObjIdx);
+        }
+
+        int getUsedCount() { return m_iUsedCount; }
 
     private:
         CIdx* m_astIndex;                           // 索引数组，用于管理对象链表
@@ -194,17 +263,49 @@ namespace MyMessenger
     class CObjHelper
     {
     public:
+        static OBJECT_TYPE* createObjByKey(const int iKey)
+        {
+            int iIndex = m_pstAllocator->onCreateObject();
+            if (iIndex < 0)
+            {
+                return nullptr;
+            }
+
+            int iRet = m_pstHashMap->insert(iIndex, iKey);
+        }
+
+        static int destoryObjByKey()
+        {}
+
+        static int getUsedCount()
+        {
+            return m_pstAllocator->getUsedCount();
+        }
+
+    public:
+        static int registerAllocator(CObjAllocator* pstAllocator, std::unordered_map<int , OBJECT_TYPE>* pstHashMap)
+        {
+            if (nullptr == pstAllocator || nullptr == pstHashMap)
+            {
+                return -1;
+            }
+
+            m_pstAllocator = pstAllocator;
+            m_pstHashMap = pstHashMap;
+
+            return 0;
+        }
 
     private:
         static CObjAllocator* m_pstAllocator;
-        static std::hash_map<int , OBJECT_TYPE>* m_pstHashMap;
+        static std::unordered_map<int , OBJECT_TYPE>* m_pstHashMap;
     };
 
     template<typename OBJECT_TYPE>
     CObjAllocator* CObjHelper<OBJECT_TYPE>::m_pstAllocator = nullptr;
 
     template<typename OBJECT_TYPE>
-    std::hash_map<int , OBJECT_TYPE>* CObjHelper<OBJECT_TYPE>::m_pstHashMap = nullptr;
+    std::unordered_map<int , OBJECT_TYPE>* CObjHelper<OBJECT_TYPE>::m_pstHashMap = nullptr;
 
 
     ////////////////////////////////////////////////////////////////////////////

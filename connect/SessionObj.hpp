@@ -2,7 +2,7 @@
 #ifndef __SESSION_OBJ_HPP__
 #define __SESSION_OBJ_HPP__
 
-#include "Obj.hpp"
+#include "ObjHelper.hpp"
 
 using namespace MyMessenger;
 
