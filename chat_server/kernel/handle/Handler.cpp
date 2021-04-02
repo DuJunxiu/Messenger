@@ -3,8 +3,7 @@
 
 CHandler::CHandler()
 {
-    m_pstRoleObj = NULL;
-    m_pstReqMsg = NULL;
+    m_pstReqMsg = nullptr;
     // m_iMsgID = -1;
 }
 
@@ -16,7 +15,7 @@ CHandler::CHandler()
 int CHandler::getMsgID()
 {
     // return m_iMsgID;
-    if (NULL == m_pstReqMsg)
+    if (nullptr == m_pstReqMsg)
     {
         return -1;
     }

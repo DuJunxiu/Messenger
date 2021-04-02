@@ -3,7 +3,6 @@
 #define __HANDLER_HPP__
 
 #include "Protocol.hpp"
-#include "RoleObj.hpp"
 
 class CHandler
 {
@@ -24,9 +23,7 @@ public:
 
 private:
     // int m_iMsgID;
-    CRoleObj* m_pstRoleObj;
     MainMsg* m_pstReqMsg;
-
 };
 
 #endif
