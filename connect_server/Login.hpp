@@ -8,7 +8,7 @@
 class CLoginHandler : public CHandler
 {
 public:
-    virtual void onClientMsg();
+    virtual int onClientMsg();
 
 public:
     int onLoginRole();

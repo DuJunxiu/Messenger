@@ -19,7 +19,7 @@ public:
 
 public:
     // 子协议处理函数
-    virtual void onClientMsg();
+    virtual int onClientMsg();
 
 private:
     // int m_iMsgID;
