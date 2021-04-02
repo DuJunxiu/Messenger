@@ -8,6 +8,7 @@ using namespace MyMessenger;
 
 class CSessionObj : public CObj
 {
+public:
 
 private:
     int m_iSessionID;
