@@ -12,7 +12,7 @@ class CSessionObj : public CObj
 public:
     void setUserID(int iUserID) { m_iUsrerID = iUserID; }
 
-    CRoleObj* bindRoleObject()
+    void bindRoleObject(int iObjectID) { m_iRoleIndex = iObjectID; }
 
 private:
     int m_iSessionID;
