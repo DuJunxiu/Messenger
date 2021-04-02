@@ -328,6 +328,23 @@ namespace MyMessenger
             return pIndex->GetNextIdx();
         }
 
+        static OBJECT_TYPE* getObjectByKey(const int iKey)
+        {
+            // 根据hash_map上的index获取对象
+            int iIndex = m_pstHashMap->find(iKey)->second();
+            return (OBJECT_TYPE*)m_pstAllocator->getObjByID(iIndex);
+        }
+
+        static OBJECT_TYPE* getObjectByIndex(const int iIndex)
+        {
+            return (OBJECT_TYPE*)m_pstAllocator->getObjByID(iIndex);
+        }
+
+        static OBJECT_TYPE* getNextObjectByIndex(const int iIndex)
+        {
+            return (OBJECT_TYPE*)m_pstAllocator->getNextObj(iIndex);
+        }
+
     public:
         static int registerAllocator(CObjAllocator* pstAllocator, std::unordered_map<int , OBJECT_TYPE>* pstHashMap)
         {
