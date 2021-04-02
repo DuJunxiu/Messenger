@@ -223,18 +223,18 @@ namespace MyMessenger
         {
             if(iObjectID < 0 || iObjectID >= m_iMaxObjCount)
             {
-                return NULL;
+                return nullptr;
             }
 
             if(!m_astIndex[iObjectID].IsUsed())
             {
-                return NULL;
+                return nullptr;
             }
 
             CIdx* pIdx = &m_astIndex[iObjectID];
-            if (NULL == pIdx)
+            if (nullptr == pIdx)
             {
-                return NULL;
+                return nullptr;
             }
 
             int iNextObjIdx = pIdx->GetNextIdx();
@@ -243,6 +243,26 @@ namespace MyMessenger
         }
 
         int getUsedCount() { return m_iUsedCount; }
+
+        CIdx* getIndex(const int iObjectID)
+        {
+            if(iObjectID < 0 || iObjectID >= m_iMaxObjCount)
+            {
+                return nullptr;
+            }
+
+            if (nullptr == m_astIndex)
+            {
+                return nullptr;
+            }
+
+            if (!m_astIndex[iObjectID].IsUsed())
+            {
+                return nullptr;
+            }
+
+            return &m_astIndex[iObjectID];
+        }
 
     private:
         CIdx* m_astIndex;                           // 索引数组，用于管理对象链表
@@ -271,15 +291,41 @@ namespace MyMessenger
                 return nullptr;
             }
 
-            int iRet = m_pstHashMap->insert(iIndex, iKey);
+            m_pstHashMap[iIndex] = iKey;
+
+            return (OBJECT_TYPE*)m_pstAllocator->getObjByID(iIndex);
         }
 
-        static int destoryObjByKey()
-        {}
+        static int destoryObjByKey(const int iKey)
+        {
+            // 先删哈希表
+            int iIndex = m_pstHashMap->find(iKey)->second();
+            m_pstHashMap->erase(iKey);
+
+            // 再删共享内存上的对象
+            int iRet = m_pstAllocator->onDestoryObject(iIndex);
+            if (iRet < 0)
+            {
+                return -1;
+            }
+
+            return 0;
+        }
 
         static int getUsedCount()
         {
             return m_pstAllocator->getUsedCount();
+        }
+
+        static int getNextIndex(const int iIndex)
+        {
+            CIdx* pIndex = m_pstAllocator->getIndex(iIndex);
+            if (nullptr == pIndex)
+            {
+                return -1;
+            }
+
+            return pIndex->GetNextIdx();
         }
 
     public:
@@ -298,14 +344,14 @@ namespace MyMessenger
 
     private:
         static CObjAllocator* m_pstAllocator;
-        static std::unordered_map<int , OBJECT_TYPE>* m_pstHashMap;
+        static std::unordered_map<int , int>* m_pstHashMap;
     };
 
     template<typename OBJECT_TYPE>
     CObjAllocator* CObjHelper<OBJECT_TYPE>::m_pstAllocator = nullptr;
 
     template<typename OBJECT_TYPE>
-    std::unordered_map<int , OBJECT_TYPE>* CObjHelper<OBJECT_TYPE>::m_pstHashMap = nullptr;
+    std::unordered_map<int , int>* CObjHelper<OBJECT_TYPE>::m_pstHashMap = nullptr;
 
 
     ////////////////////////////////////////////////////////////////////////////
@@ -339,7 +385,7 @@ namespace MyMessenger
         {                                                                        \
             if(!pThis)                                                           \
             {                                                                    \
-                return NULL;                                                     \
+                return nullptr;                                                  \
             }                                                                    \
                                                                                  \
             return (void*)pThis;                                                 \
