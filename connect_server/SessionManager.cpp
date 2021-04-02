@@ -27,11 +27,19 @@ CSessionObj* CSessionManager::onCreateSession(const int iSocketFD, const int iUs
         return nullptr;
     }
 
+    pNewSession->setObjectID(iSessionID);
+    pNewSession->setUserID(iUserID);
+
     TRACELOG("create session : %d\n", iSessionID);
 }
 
-int CSessionManager::onDeleteSession(const int iSessionID)
-{}
+int CSessionManager::deleteSessionByID(const int iSessionID)
+{
+    TRACELOG("delete session : %d\n", iSessionID);
+    return CObjHelper<CSessionObj>::destoryObjByKey(iSessionID);
+}
 
 CSessionObj* CSessionManager::findSessionByID(const int iSessionID)
-{}
+{
+    return (CSessionObj*)CObjHelper<CSessionObj>::getObjectByKey(iSessionID);
+}

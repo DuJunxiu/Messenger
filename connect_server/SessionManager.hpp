@@ -18,7 +18,7 @@ public:
     // 通过socket创建sessionID
     CSessionObj* onCreateSession(const int iSocketFD, const int iUserID);
 
-    int onDeleteSession(const int iSessionID);
+    int deleteSessionByID(const int iSessionID);
 
     CSessionObj* findSessionByID(const int iSessionID);
 };
