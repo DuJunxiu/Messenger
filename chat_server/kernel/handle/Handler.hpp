@@ -4,6 +4,12 @@
 
 #include "Protocol.hpp"
 
+typedef struct
+{
+    int iSocketID;
+    unsigned int uiSrcIP;
+} NetHead;
+
 class CHandler
 {
 public:

@@ -4,5 +4,5 @@
 int CLoginHandler::onClientMsg()
 {}
 
-int CLoginHandler::onLoginRole()
+int CLoginHandler::onLoginRole(int iUserID)
 {}

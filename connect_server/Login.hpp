@@ -11,7 +11,7 @@ public:
     virtual int onClientMsg();
 
 public:
-    int onLoginRole();
+    int onLoginRole(int iUserID);
 
 private:
     CRoleObj* m_pRoleObj;
