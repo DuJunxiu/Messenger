@@ -3,6 +3,7 @@
 #define __HANDLER_FACTORY_HPP__
 
 #include "Handler.hpp"
+using namespace MyMessenger;
 
 class CHandlerFactory
 {

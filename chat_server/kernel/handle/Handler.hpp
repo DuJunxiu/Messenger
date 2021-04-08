@@ -3,6 +3,7 @@
 #define __HANDLER_HPP__
 
 #include "Protocol.hpp"
+#include "LogDeal.hpp"
 
 typedef struct
 {

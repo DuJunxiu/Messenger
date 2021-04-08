@@ -17,7 +17,7 @@ void CHandlerFactory::registerHandler(const unsigned int uiMsgID, const CHandler
         return;
     }
 
-    if (NULL == pHandler)
+    if (nullptr == pHandler)
     {
         TRACELOG("Error pHandler NULL\n");
         return;
@@ -26,7 +26,7 @@ void CHandlerFactory::registerHandler(const unsigned int uiMsgID, const CHandler
     // 不能重复注册
     if (m_apHandler[uiMsgID - 1])
     {
-        TRACELOG("Error repeat register MsgID = %u\n", uiMsgID);
+        TRACELOG("Error repeat register MsgID : %u\n", uiMsgID);
         return;
     }
 
@@ -41,6 +41,6 @@ CHandler* CHandlerFactory::getHandler(const unsigned int uiMsgID)
         return;
     }
 
-    // 未注册的话，就是 NULL
+    // 未注册的话，就是 nullptr
     return m_apHandler[uiMsgID - 1];
 }
