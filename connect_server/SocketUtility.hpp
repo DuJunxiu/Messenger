@@ -12,11 +12,11 @@ namespace MyMessenger
 {
     const int MAX_LISTEN_SOCKET_COUNT = 5;
 
-    class CSocketUtility
+    class CBaseSocket
     {
     public:
-        CSocketUtility()    {}
-        ~CSocketUtility()    {}
+        CBaseSocket();
+        ~CBaseSocket();
 
     public:
         // 初始化
@@ -33,6 +33,27 @@ namespace MyMessenger
 
         // 接收消息
         int acceptRequest();
+
+        // 连接socket
+        int connectSocket();
+
+        // 发送消息
+        int sendResponse();
+
+        // 关闭
+        int closeSocket();
+
+    public:
+        net_handle_t getSocket() {}
+
+    private:
+        std::string     m_remote_ip;    // 远程ip
+        uint16_t        m_remote_port;  // 远程端口
+        std::string     m_local_ip;     // 本地ip
+        uint16_t        m_local_port;   // 本地端口
+
+        net_handle_t    m_socket;       // socket id
+        uint8_t         m_state;        // socket状态
 
     };
 }

@@ -39,13 +39,13 @@ namespace MyMessenger
             m_pstThread = new pthread_t[MAX_THREAD_COUNT];
             for (int i = 0; i < MAX_THREAD_COUNT; ++i)
             {
-                if(0 != pthread_create(m_pstThread + i, NULL, routine, (void*)this)) 
+                if (0 != pthread_create(m_pstThread + i, NULL, routine, (void*)this)) 
                 {
                     delete[] m_pstThread;
                     return -1;
                 }
 
-                if(0 != pthread_detach(m_pstThread[i]))
+                if (0 != pthread_detach(m_pstThread[i]))
                 {
                     delete[] m_pstThread;
                     return -1;

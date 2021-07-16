@@ -361,7 +361,7 @@ namespace MyMessenger
 
     private:
         static CObjAllocator* m_pstAllocator;
-        static std::unordered_map<int, int>* m_pstHashMap;
+        static std::unordered_map<int , int>* m_pstHashMap;
     };
 
     template<typename OBJECT_TYPE>
