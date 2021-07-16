@@ -7,11 +7,11 @@ using namespace MyMessenger;
 
 int main()
 {
-    unsigned int uiTime = time(NULL);
+    unsigned int uiTime = time(nullptr);
 
-    while (uiTime + 60 > time(NULL))
+    while (uiTime + 60 > time(nullptr))
     {
-        TRACELOG("now timestamp is %u\n", time(NULL));
+        TRACELOG("now timestamp is %u\n", time(nullptr));
         sleep(2);
     }
 }

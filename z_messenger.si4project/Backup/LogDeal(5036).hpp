@@ -26,7 +26,7 @@ namespace MyMessenger
         int initLogFile()
         {
             m_uiLastTickTime = 0;
-            m_pFile = nullptr;
+            m_pFile = NULL;
             memset(m_szFileName, 0, sizeof(char) * MAX_FILE_NAME_LENGTH);
 
             checkLogFile();
@@ -42,7 +42,7 @@ namespace MyMessenger
                 if (m_pFile)
                 {
                     fclose(m_pFile);
-                    m_pFile = nullptr;
+                    m_pFile = NULL;
                 }
 
                 checkLogFile();
@@ -81,7 +81,7 @@ namespace MyMessenger
         // 日志文件是否打开
         void checkLogFile()
         {
-            if (nullptr == m_pFile)
+            if (NULL == m_pFile)
             {
                 int iYear, iMonth, iDay;
                 CTimeUtility::makeTime_ymd(CTimeUtility::m_uiTime, iYear, iMonth, iDay);

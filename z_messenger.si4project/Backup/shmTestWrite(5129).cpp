@@ -6,7 +6,7 @@
 int main()
 {
     CSharedMemory* pstShm = new CSharedMemory;
-    if (nullptr == pstShm)
+    if (NULL == pstShm)
     {
         printf("new CSharedMemory failed\n");
         return -1;
@@ -22,9 +22,9 @@ int main()
     }
 
     int* piCount = (int*)pstShm->getFreeAddress();
-    if (nullptr == piCount)
+    if (NULL == piCount)
     {
-        printf("piCount is nullptr\n");
+        printf("piCount is NULL\n");
         return -1;
     }
 
@@ -36,14 +36,14 @@ int main()
     while (*piCount <= 5)
     {
         const char* pFreeAddress = pstShm->getFreeAddress();
-        if (nullptr == pFreeAddress)
+        if (NULL == pFreeAddress)
         {
-            printf("pFreeAddress is nullptr\n");
+            printf("pFreeAddress is NULL\n");
             break;
         }
 
         ShmTest* pstTest = (ShmTest*)pFreeAddress;
-        if (nullptr == pstTest)
+        if (NULL == pstTest)
         {
             break;
         }

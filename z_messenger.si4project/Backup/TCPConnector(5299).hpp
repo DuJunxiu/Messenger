@@ -14,13 +14,12 @@ public:
     ~CTCPConnector();
 
 public:
-    int getSocket() { return m_iSocket; }
-    void setSocket(net_handle_t sock) { m_iSocket = sock; }
+    int getSocket() {return m_iSocket;}
 
 public:
-    int onRecvData(int iSocket);
+    int onRecvData();
 
-    int onSendData(const char* pcSendData, int iLength);
+    int onSendData();
 
 private:
     int m_iSocket;                  // 连接的socket

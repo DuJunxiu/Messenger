@@ -8,12 +8,12 @@ namespace MyMessenger
     {
     public:
         // 获取当前时间戳
-        static time_t getNowTime() { return time(NULL); }
+        static time_t getNowTime() { return time(nullptr); }
         
         // 时间戳转时间字符串
         static int convertUnixTimeToString(time_t uiTime, char* szString)
         {
-            if(szString == NULL)
+            if(szString == nullptr)
             {
                 return -1;
             }
@@ -23,7 +23,7 @@ namespace MyMessenger
             struct tm stTempTm;
             struct tm *pTempTm = localtime_r(&uiTime, &stTempTm);
 
-            if(pTempTm == NULL)
+            if(pTempTm == nullptr)
             {
                 return -2;
             }

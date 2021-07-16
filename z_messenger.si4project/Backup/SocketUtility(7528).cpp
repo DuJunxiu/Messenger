@@ -140,12 +140,3 @@ void CBaseSocket::closeSocket(void)
     removeSocket(this);
 }
 
-void CBaseSocket::OnRead()
-{}
-
-void CBaseSocket::OnWrite()
-{}
-
-void CBaseSocket::OnClose()
-{}
-

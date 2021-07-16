@@ -25,7 +25,7 @@ public:
         m_uiShmKey = 0;
         m_iShmID = 0;
         m_iFreeOffset = 0;
-        m_pShmAddress = nullptr;
+        m_pShmAddress = NULL;
 
         printf("----- initialize -----\n");
 
@@ -41,7 +41,7 @@ public:
 
         printf("----- destory -----\n");
 
-        return shmctl(m_iShmID, IPC_RMID, nullptr);
+        return shmctl(m_iShmID, IPC_RMID, NULL);
     }
 
 public:
@@ -66,8 +66,8 @@ public:
             return -1;
         }
 
-        m_pShmAddress = (char*)shmat(m_iShmID, nullptr, 0);
-        if (nullptr == m_pShmAddress)
+        m_pShmAddress = (char*)shmat(m_iShmID, NULL, 0);
+        if (NULL == m_pShmAddress)
         {
             printf("allocate shm space error, shmat failed\n");
             return -1;

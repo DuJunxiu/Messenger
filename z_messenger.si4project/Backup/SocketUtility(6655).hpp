@@ -5,7 +5,6 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <unorder_map>
 
 #include "LogDeal.hpp"
 #include "Config.h"
@@ -45,24 +44,17 @@ namespace MyMessenger
         // 监听socket
         int listenSocket(void);
 
-        // 连接socket
-        int connectSocket(const char* pszIP, uint16_t usPort);
-
         // 接收消息
-        int recvMsg(void);
+        int acceptRequest(void);
+
+        // 连接socket
+        int connectSocket(void);
 
         // 发送消息
-        int sendMsg(void);
+        int sendResponse(void);
 
         // 关闭
-        void closeSocket(void);
-
-    public:
-        void OnRead();
-
-        void OnWrite();
-
-        void OnClose();
+        int closeSocket(void);
 
     public:
         net_handle_t getSocket() { return m_socket; }

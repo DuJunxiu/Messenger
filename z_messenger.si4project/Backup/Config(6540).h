@@ -10,11 +10,6 @@ typedef unsigned short      uint16_t;
 typedef unsigned int        uint32_t;
 typedef unsigned long long  uint64_t;
 
-typedef char                BOOL;
-
 typedef int net_handle_t;
-
-#define TRUE    (0)
-#define FALSE   (-1)
 
 #endif

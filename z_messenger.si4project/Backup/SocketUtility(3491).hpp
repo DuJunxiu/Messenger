@@ -58,13 +58,6 @@ namespace MyMessenger
         void closeSocket(void);
 
     public:
-        void OnRead();
-
-        void OnWrite();
-
-        void OnClose();
-
-    public:
         net_handle_t getSocket() { return m_socket; }
 
     private:

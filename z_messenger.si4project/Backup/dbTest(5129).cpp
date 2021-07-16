@@ -6,7 +6,7 @@
 int main()
 {
     CDBOperate* pstDBOperate = new CDBOperate;
-    if (nullptr == pstDBOperate)
+    if (NULL == pstDBOperate)
     {
         printf("new CDBOperate failed \n");
         return -1;

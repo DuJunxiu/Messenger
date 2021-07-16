@@ -14,8 +14,8 @@ public:
 public:
     int initialize()
     {
-        m_pstMysql = mysql_init(nullptr);
-        if (nullptr == m_pstMysql)
+        m_pstMysql = mysql_init(NULL);
+        if (NULL == m_pstMysql)
         {
             printf("initialize DB failed !\n");
             return -1;
@@ -29,8 +29,8 @@ public:
     int open(const std::string& strHost, const std::string& strUser, const std::string& strPassword, const std::string& strDBName)
     {
         // 数据库连接
-        m_pstMysql = mysql_real_connect(m_pstMysql, strHost.c_str(), strUser.c_str(), strPassword.c_str(), strDBName.c_str(), 0, nullptr, 0);
-        if (nullptr == m_pstMysql)
+        m_pstMysql = mysql_real_connect(m_pstMysql, strHost.c_str(), strUser.c_str(), strPassword.c_str(), strDBName.c_str(), 0, NULL, 0);
+        if (NULL == m_pstMysql)
         {
             printf("connect to DB failed !\n");
             return -1;
@@ -43,10 +43,10 @@ public:
 
     int close()
     {
-        if (nullptr != m_pstMysql)
+        if (NULL != m_pstMysql)
         {
             mysql_close(m_pstMysql);
-            m_pstMysql = nullptr;
+            m_pstMysql = NULL;
         }
 
         printf("connect close OK !\n");
@@ -62,17 +62,17 @@ public:
             return -1;
         }
 
-        if (nullptr == m_pstMysql)
+        if (NULL == m_pstMysql)
         {
-            printf("execute error, m_pstMysql is nullptr !\n");
+            printf("execute error, m_pstMysql is NULL !\n");
             return -1;
         }
 
         // 执行语句前结果集不为空的话，先释放
-        if (nullptr != m_pstResult)
+        if (NULL != m_pstResult)
         {
             mysql_free_result(m_pstResult);
-            m_pstResult = nullptr;
+            m_pstResult = NULL;
         }
 
         printf("start execute [%s]\n", strSql.c_str());
@@ -98,7 +98,7 @@ public:
             {
                 // mysql_fetch_row() 返回下一行的二级指针, 可以理解为一个二维数组
                 stRow = mysql_fetch_row(m_pstResult);
-                if (nullptr == stRow)
+                if (NULL == stRow)
                 {
                     break;
                 }

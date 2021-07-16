@@ -7,11 +7,11 @@ CTCPConnector::CTCPConnector()
 CTCPConnector::~CTCPConnector()
 {}
 
-int CTCPConnector::onRecvData(int iSocket)
+int CTCPConnector::onRecvData()
 {
     pthread_mutex_lock(m_stMutex);
 
-    char* pcReadData = nullptr;
+    char* pcReadData = NULL;
 
     // 先尝试接收一下
     int iFreeByte = m_stRecvBuffer.getFreeSize();
@@ -41,7 +41,7 @@ int CTCPConnector::onSendData(const char* pcSendData, int iLength)
     {
         do
         {
-            char* pcLastData = nullptr;
+            char* pcLastData = NULL;
             int iLastSize = 0;
             iRet = m_stSendBuffer.onRead(pcLastData, iLastSize);
             if (iRet < 0)

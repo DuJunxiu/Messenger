@@ -86,23 +86,15 @@ int CBaseSocket::listenSocket(void)
     return 0;
 }
 
-int CBaseSocket::connectSocket(const char* pszIP, uint16_t usPort)
+int CBaseSocket::connectSocket(void)
 {
-    if (m_socket != ERROR_SOCKET)
-    {
-        return -1;
-    }
-
-    m_remote_ip = to_string(pszIP);
-    m_remote_port = usPort;
-
     struct sockaddr_in stSockAddr;
     memset(&stSockAddr, 0, sizeof(stSockAddr));
     stSockAddr.sin_family = AF_INET;
     stSockAddr.sin_addr.s_addr = inet_addr(pszIP);
     stSockAddr.sin_port = htons(usPort);
 
-    int iRet = connect(m_socket, (sockaddr*)&stSockAddr, sizeof(stSockAddr));
+    int iRet = connect(m_socket, MAX_LISTEN_SOCKET_COUNT);
     if (iRet < 0)
     {
         TRACELOG("Listen Failed", ...);
@@ -117,35 +109,11 @@ int CBaseSocket::connectSocket(const char* pszIP, uint16_t usPort)
 }
 
 // 接收消息
-int CBaseSocket::recvMsg(void* buffer, int length)
-{
-    return recv(m_socket, (char*)buffer, length, 0);
-}
+int CBaseSocket::acceptMsg(void)
+{}
 
 // 发送消息
-int CBaseSocket::sendMsg(void* buffer, int length)
-{
-    if (m_state != SOCKET_STATE_LISTENING)
-    {
-        return -1;
-    }
-
-    return send(m_socket, (char*)buffer, length, 0);
-}
-
-// 关闭
-void CBaseSocket::closeSocket(void)
-{
-    close(m_socket);
-    removeSocket(this);
-}
-
-void CBaseSocket::OnRead()
+int CBaseSocket::sendMsg(void)
 {}
 
-void CBaseSocket::OnWrite()
-{}
-
-void CBaseSocket::OnClose()
-{}
 

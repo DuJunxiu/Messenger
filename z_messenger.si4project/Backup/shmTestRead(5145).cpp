@@ -5,7 +5,7 @@
 int main()
 {
     CSharedMemory* pstShm = new CSharedMemory;
-    if (nullptr == pstShm)
+    if (NULL == pstShm)
     {
         printf("new CSharedMemory failed\n");
         return -1;

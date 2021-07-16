@@ -29,9 +29,9 @@ namespace MyMessenger
             bStop = false;
 
             m_iIdelCount = MAX_THREAD_COUNT;
-            m_pstThread = nullptr;
-            pthread_mutex_init(&m_stMutex, nullptr);
-            pthread_cond_init(&m_stCond, nullptr);
+            m_pstThread = NULL;
+            pthread_mutex_init(&m_stMutex, NULL);
+            pthread_cond_init(&m_stCond, NULL);
 
             m_iTaskCount = 0;
 
@@ -39,7 +39,7 @@ namespace MyMessenger
             m_pstThread = new pthread_t[MAX_THREAD_COUNT];
             for (int i = 0; i < MAX_THREAD_COUNT; ++i)
             {
-                if(0 != pthread_create(m_pstThread + i, nullptr, routine, (void*)this)) 
+                if(0 != pthread_create(m_pstThread + i, NULL, routine, (void*)this)) 
                 {
                     delete[] m_pstThread;
                     return -1;
@@ -76,7 +76,7 @@ namespace MyMessenger
             int i = 0;
             while (m_pstThread && i < MAX_THREAD_COUNT)
             {
-                pthread_join(m_pstThread[i], nullptr);
+                pthread_join(m_pstThread[i], NULL);
                 ++i;
             }
 
@@ -95,7 +95,7 @@ namespace MyMessenger
             m_iTaskCount = 0;
 
             delete[] m_pstThread;
-            m_pstThread = nullptr;
+            m_pstThread = NULL;
 
             return 0;
         }
@@ -106,9 +106,9 @@ namespace MyMessenger
             //printf("routine thread %lu\n", pthread_self());
 
             CThreadPool* pstThreadPool = (CThreadPool*)arg;
-            if (nullptr == pstThreadPool)
+            if (NULL == pstThreadPool)
             {
-                return nullptr;
+                return NULL;
             }
 
             while (!pstThreadPool->bStop)
@@ -153,15 +153,15 @@ namespace MyMessenger
 
                 pstRoutine->m_pfRun(pstRoutine->m_pArg);
                 delete pstRoutine;
-                pstRoutine = nullptr;
+                pstRoutine = NULL;
             }
 
-            return nullptr;
+            return NULL;
         }
 
         int addTask(void* (*run)(void *arg), void* arg)
         {
-            if (nullptr == run)
+            if (NULL == run)
             {
                 return -1;
             }
