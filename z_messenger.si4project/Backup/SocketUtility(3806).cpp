@@ -148,26 +148,8 @@ void CBaseSocket::OnRead()
     }
 
     net_handle_t fd = 0;
-    sockaddr_in peer_addr;
-    socklen_t addr_len = sizeof(sockaddr_in);
-    char ip_str[64];
     while (fd = accept(m_socket, (sockaddr*)&peer_addr, &addr_len)) > 0)
-    {
-        CBaseSocket* pSocket = new CBaseSocket;
-        uint32_t ip = ntohl(peer_addr.sin_addr.s_addr);
-        uint16_t port = ntohs(peer_addr.sin_port);
-
-        snprintf(ip_str, sizeof(ip_str), "%d.%d.%d.%d", ip >> 24, (ip >> 16) & 0xFF, (ip >> 8) & 0xFF, ip & 0xFF);
-
-        TRACELOG("accept socket fd %d, address %s:%u", fd, ip_str, port);
-
-        pSocket->setSocket(fd);
-        pSocket->setState(SOCKET_STATE_CONNECTED);
-        pSocket->SetRemoteIP(ip_str);
-        pSocket->SetRemotePort(port);
-
-        addSocket(pSocket);
-    }
+    {}
 }
 
 void CBaseSocket::OnWrite()

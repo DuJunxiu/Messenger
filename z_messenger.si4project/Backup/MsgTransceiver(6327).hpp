@@ -5,8 +5,6 @@
 class CMsgTransceiver
 {
 public:
-    CMsgTransceiver();
-    ~CMsgTransceiver();
 
 public:
 
@@ -15,4 +13,3 @@ private:
 };
 
 #endif
-

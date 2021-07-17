@@ -66,20 +66,6 @@ namespace MyMessenger
 
     public:
         net_handle_t getSocket() { return m_socket; }
-        void setSocket(net_handle_t fd) { m_socket = fd; }
-
-        uint8_t getState() { return m_state; }
-        void setState(uint8_t state) { m_state = state; }
-
-        char* getRemoteIP() { return m_remote_ip.c_str(); }
-        void setRemoteIP(char* pRemoteIP) { m_remote_ip = to_string(pRemoteIP); }
-        uint16_t getRemotePort() { return m_remote_port; }
-        void setRemotePort(uint16_t port) { m_remote_port = port; }
-
-        char* getLocalIP() { return m_local_ip.c_str(); }
-        void setLocalIP(char* pLocalIP) { m_local_ip = to_string(pLocalIP); }
-        uint16_t getLocalPort() { return m_local_port; }
-        void setLocalPort(uint16_t port) { m_local_port = port; }
 
     private:
         std::string     m_remote_ip;    // 远程ip
