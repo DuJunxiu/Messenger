@@ -41,10 +41,10 @@ namespace MyMessenger
     };
 
     // 一个日志文件管理类的实例
-    typedef CSingleton<CLogFileManager> LogFileManagerSingleton;
+    typedef CSingleton<CLogFileManager> logManagerSingleton;
 
     // 无条件强制打印日志
-    #define TRACELOG(format, ...) LogFileManagerSingleton::GetInstance()->tryWriteLog(format, ##__VA_ARGS__)
+    #define TRACELOG(format, ...) logManagerSingleton::GetInstance()->tryWriteLog(format, ##__VA_ARGS__)
 
 }
 

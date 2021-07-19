@@ -136,7 +136,6 @@ int CBaseSocket::sendMsg(void* buffer, int length)
 // 关闭
 void CBaseSocket::closeSocket(void)
 {
-    REMOVE_EVENT(m_socket, SOCKET_ALL);
     close(m_socket);
     removeSocket(this);
 }
@@ -174,12 +173,8 @@ void CBaseSocket::OnRead()
 }
 
 void CBaseSocket::OnWrite()
-{
-    REMOVE_EVENT(m_socket, SOCKET_WRITE);
-}
+{}
 
 void CBaseSocket::OnClose()
-{
-    m_state = SOCKET_STATE_CLOSING;
-}
+{}
 

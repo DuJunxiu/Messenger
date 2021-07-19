@@ -45,10 +45,10 @@ private:
 };
 
 // 一个事件调度类的实例
-typedef CSingleton<CEventDispatch> EventDispatchSingleton;
+typedef CSingleton<CEventDispatch> EventDispatchObj;
 
-#define ADD_EVENT(fd, event) EventDispatchSingleton::GetInstance()->AddEvent(fd, event)
-#define REMOVE_EVENT(fd, event) EventDispatchSingleton::GetInstance()->RemoveEvent(fd, event)
+#define ADD_EVENT(fd, event) EventDispatchObj::GetInstance()->AddEvent(fd, event)
+#define REMOVE_EVENT(fd, event) EventDispatchObj::GetInstance()->RemoveEvent(fd, event)
 
 #endif
 
