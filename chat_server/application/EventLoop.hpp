@@ -6,6 +6,13 @@
 
 using namespace MyMessenger;
 
+enum
+{
+    SERVER_NOTHING  = 0,
+    SERVER_START    = 1,
+    SERVER_STOP     = 2;
+};
+
 class CEventLoop
 {
 public:

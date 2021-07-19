@@ -6,6 +6,9 @@
 #include <sys/epoll.h>
 
 #include "Config.h"
+#include "Singleton.h"
+
+using namespace MyMessenger;
 
 #define EVENT_MODE_SELECT   1
 #define EVENT_MODE_POLL     0
@@ -40,6 +43,12 @@ private:
     int     m_epollfd;
 #endif
 };
+
+// 一个事件调度类的实例
+typedef CSingleton<CEventDispatch> EventDispatchObj;
+
+#define ADD_EVENT(fd, event) EventDispatchObj::GetInstance()->AddEvent(fd, event)
+#define REMOVE_EVENT(fd, event) EventDispatchObj::GetInstance()->RemoveEvent(fd, event)
 
 #endif
 

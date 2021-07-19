@@ -12,7 +12,7 @@ using namespace MyMessenger;
 int CLogFileManager::initLogFile()
 {
     m_uiLastTickTime = 0;
-    m_pFile = NULL;
+    m_pFile = nullptr;
     memset(m_szFileName, 0, sizeof(char) * MAX_FILE_NAME_LENGTH);
 
     checkLogFile();
@@ -22,7 +22,7 @@ int CLogFileManager::initLogFile()
 
 void CLogFileManager::checkLogFile()
 {
-    if (NULL == m_pFile)
+    if (nullptr == m_pFile)
     {
         int iYear, iMonth, iDay;
         CTimeUtility::makeTime_ymd(CTimeUtility::m_uiTime, iYear, iMonth, iDay);
@@ -45,7 +45,7 @@ void CLogFileManager::OnTick()
         if (m_pFile)
         {
             fclose(m_pFile);
-            m_pFile = NULL;
+            m_pFile = nullptr;
         }
 
         checkLogFile();

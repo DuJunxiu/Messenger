@@ -34,7 +34,7 @@ namespace MyMessenger
     };
 
     template<class T>
-    CSingleton<T>* CSingleton<T>::m_pInstance = NULL;
+    CSingleton<T>* CSingleton<T>::m_pInstance = nullptr;
 }
 
 #endif

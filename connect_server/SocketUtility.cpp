@@ -167,6 +167,8 @@ void CBaseSocket::OnRead()
         pSocket->SetRemotePort(port);
 
         addSocket(pSocket);
+
+        ADD_EVENT(fd, SOCKET_READ | SOCKET_EXCEP);
     }
 }
 
