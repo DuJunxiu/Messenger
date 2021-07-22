@@ -15,11 +15,11 @@ namespace MyMessenger
 
     typedef enum enmIdxUseFlag
     {
-        EIUF_FREE = 0, // 该对象未被使用
-        EIUF_USED = 1, // 该对象已被使用
+        EIUF_FREE = 0, //该对象未被使用
+        EIUF_USED = 1, //该对象已被使用
     } ENMIDXUSEFLAG;
 
-    // 索引类，仅在CObjAllocator中使用，外层一般不用
+    //索引类，仅在CObjAllocator中使用，外层一般不用
     class CIdx
     {
     public:
@@ -185,7 +185,6 @@ namespace MyMessenger
             {
                 m_astIndex[iPrevIdx].SetNextIdx(iNextIdx);
             }
-
             if (iNextIdx >= 0)
             {
                 m_astIndex[iNextIdx].SetPrevIdx(iPrevIdx);
@@ -238,7 +237,9 @@ namespace MyMessenger
                 return nullptr;
             }
 
-            return getObjByID(pIdx->GetNextIdx());
+            int iNextObjIdx = pIdx->GetNextIdx();
+
+            return getObjByID(iNextObjIdx);
         }
 
         int getUsedCount() { return m_iUsedCount; }

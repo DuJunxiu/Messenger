@@ -28,16 +28,7 @@ int removeSocket(CBaseSocket* pSocket)
 }
 
 CBaseSocket* findBaseSocket(net_handle_t fd)
-{
-    CBaseSocket* pSocket = nullptr;
-    SocketMap::iterator iter = g_pSocketMap.find(fd);
-    if (iter != g_pSocketMap.end())
-    {
-        pSocket = iter->second;
-    }
-
-    return pSocket;
-}
+{}
 
 /////////////////////////////////////////////////////////////////////
 

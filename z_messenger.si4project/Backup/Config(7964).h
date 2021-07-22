@@ -17,9 +17,7 @@ typedef char                BOOL;
 
 typedef int net_handle_t;
 
-#define ASSERT_AND_LOG_RTN_INT(x) if (!(x)) return -1;
-#define ASSERT_AND_LOG_RTN_VOID(x) if (!(x)) return;
-#define ASSERT_AND_LOG_RTN_BOOL(x) if (!(x)) return false;
+#define ASSERT_AND_LOG_RTN_INT(x) return !x;
 
 typedef void (*callback_t)(void* callback_data, uint8_t msg, uint32_t handle, void* pParam);
 

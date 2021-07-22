@@ -7,18 +7,15 @@ CTCPConnector::CTCPConnector()
 CTCPConnector::~CTCPConnector()
 {}
 
-int CTCPConnector::onRecvData()
+int CTCPConnector::onRecvData(int iSocket)
 {
     pthread_mutex_lock(m_stMutex);
-
-    CBaseSocket* pSocket = findBaseSocket(m_socket);
-    ASSERT_AND_LOG_RTN_INT(pSocket);
 
     char* pcReadData = nullptr;
 
     // 先尝试接收一下
     int iFreeByte = m_stRecvBuffer.getFreeSize();
-    int iRecvByte = pSocket->recvMsg((void*)pcReadData, m_stRecvBuffer.getMaxSize());
+    int iRecvByte = recv(iSocket, pcReadData, m_stRecvBuffer.getMaxSize(), 0);
     if (iFreeByte < iRecvByte)
     {
         pthread_mutex_unlock(m_stMutex);
@@ -37,9 +34,6 @@ int CTCPConnector::onSendData(const char* pcSendData, int iLength)
 {
     pthread_mutex_lock(m_stMutex);
 
-    CBaseSocket* pSocket = findBaseSocket(m_socket);
-    ASSERT_AND_LOG_RTN_INT(pSocket);
-
     int iRet = 0;
 
     // 先尝试发送滞留数据
@@ -55,7 +49,7 @@ int CTCPConnector::onSendData(const char* pcSendData, int iLength)
                 break;
             }
 
-            int iSendByte = pSocket->sendMsg((void*)pcLastData, iLastSize);
+            int iSendByte = send(m_iSocket, (const char *)pcLastData, iLastSize, 0);
             if (0 == iSendByte)
             {
                 break;
@@ -80,7 +74,7 @@ int CTCPConnector::onSendData(const char* pcSendData, int iLength)
     int iTempLen = iLength;
     do
     {
-        int iSendByte = pSocket->sendMsg((void*)pTempData, iTempLen, );
+        int iSendByte = send(m_iSocket, pTempData, iTempLen, 0);
         if (iSendByte <= 0)
         {
             // 没发完的数据存入缓存

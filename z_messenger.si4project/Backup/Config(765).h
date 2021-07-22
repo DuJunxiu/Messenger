@@ -12,15 +12,9 @@ typedef unsigned long long  uint64_t;
 
 typedef char                BOOL;
 
-#define TRUE    (0)
-#define FALSE   (-1)
-
 typedef int net_handle_t;
 
-#define ASSERT_AND_LOG_RTN_INT(x) if (!(x)) return -1;
-#define ASSERT_AND_LOG_RTN_VOID(x) if (!(x)) return;
-#define ASSERT_AND_LOG_RTN_BOOL(x) if (!(x)) return false;
-
-typedef void (*callback_t)(void* callback_data, uint8_t msg, uint32_t handle, void* pParam);
+#define TRUE    (0)
+#define FALSE   (-1)
 
 #endif
