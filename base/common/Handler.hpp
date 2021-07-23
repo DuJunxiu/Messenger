@@ -8,7 +8,7 @@
 typedef struct
 {
     int iSocketID;
-    unsigned int uiSrcIP;
+    uint32_t uiSrcIP;
 } NetHead;
 
 class CHandler
