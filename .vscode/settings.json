@@ -40,6 +40,22 @@
         "xtr1common": "cpp",
         "xutility": "cpp",
         "unordered_map": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "ctime": "cpp",
+        "ios": "cpp",
+        "istream": "cpp",
+        "iterator": "cpp",
+        "locale": "cpp",
+        "ostream": "cpp",
+        "streambuf": "cpp",
+        "xfacet": "cpp",
+        "xiosbase": "cpp",
+        "xlocale": "cpp",
+        "xlocbuf": "cpp",
+        "xlocinfo": "cpp",
+        "xlocmes": "cpp",
+        "xlocmon": "cpp",
+        "xlocnum": "cpp",
+        "xloctime": "cpp"
     }
 }

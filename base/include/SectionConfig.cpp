@@ -8,7 +8,7 @@ CSectionConfig::~CSectionConfig()
 {}
 
 // 参考自 https://www.cnblogs.com/coolcpp/p/cpp-regex.html
-void CSectionConfig::initMapByFile(std::string strFileName)
+void CSectionConfig::initMapByFile(const std::string& strFileName)
 {
     FILE* fp = fopen(strFileName.c_str(), "r");
     if (NULL == fp)
@@ -30,15 +30,18 @@ void CSectionConfig::initMapByFile(std::string strFileName)
 
         fgetc(fp);
     }
+
+    fclose(fp);
 }
 
-std::string CSectionConfig::getValueByKey(std::string strKey)
+int CSectionConfig::getValueByKey(const std::string& strKey, std::string& strPara)
 {
     auto it = m_SectionMap.find(strKey);
     if (it != m_SectionMap.end())
     {
-        return it->second;
+        strPara = it->second;
+        return 0;
     }
 
-    return {};
+    return -1;
 }

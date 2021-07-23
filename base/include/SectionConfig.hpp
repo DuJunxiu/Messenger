@@ -14,9 +14,9 @@ public:
     ~CSectionConfig();
 
 public:
-    void initMapByFile(std::string strFileName);
+    void initMapByFile(const std::string& strFileName);
 
-    std::string getValueByKey(std::string strKey);
+    int getValueByKey(const std::string& strKey, std::string& strPara);
 
 private:
     std::unordered_map<std::string, std::string> m_SectionMap;
