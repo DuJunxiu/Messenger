@@ -7,7 +7,7 @@ CDBUtility::CDBUtility()
 CDBUtility::~CDBUtility()
 {}
 
-int CDBUtility::loadConfig(std::string strFileName)
+int CDBUtility::loadConfig(const std::string& strFileName)
 {
     CSectionConfig section;
     section.initMapByFile(strFileName);

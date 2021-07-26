@@ -17,7 +17,7 @@ public:
     ~CDBUtility();
 
 public:
-    int loadConfig(std::string strFileName);
+    int loadConfig(const std::string& strFileName);
 
 private:
 

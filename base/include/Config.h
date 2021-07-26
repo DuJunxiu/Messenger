@@ -23,4 +23,13 @@ typedef int net_handle_t;
 
 typedef void (*callback_t)(void* callback_data, uint8_t msg, uint32_t handle, void* pParam);
 
+enum SERVER_CMD
+{
+    NOTHING = 0,
+    START   = 1,
+    STOP    = 2,
+    RESUME  = 3,
+    RELOAD  = 4
+};
+
 #endif

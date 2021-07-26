@@ -15,6 +15,7 @@ void initSocketMap()
     }
 
     // 在共享内存上创建
+    g_pSocketMap.clear();
 }
 
 int addSocket(CBaseSocket* pSocket)
@@ -47,7 +48,7 @@ CBaseSocket::CBaseSocket()
     m_state = SOCKET_STATE_IDLE;
 }
 
-~CBaseSocket::CBaseSocket()
+CBaseSocket::~CBaseSocket()
 {}
 
 int CBaseSocket::createSocket(void)
@@ -84,7 +85,7 @@ int CBaseSocket::listenSocket(void)
     int iRet = listen(m_socket, MAX_LISTEN_SOCKET_COUNT);
     if (iRet < 0)
     {
-        TRACELOG("Listen Failed", ...);
+        TRACELOG("Listen Failed\n");
         return -1;
     }
 
@@ -114,7 +115,7 @@ int CBaseSocket::connectSocket(const char* pszIP, uint16_t usPort)
     int iRet = connect(m_socket, (sockaddr*)&stSockAddr, sizeof(stSockAddr));
     if (iRet < 0)
     {
-        TRACELOG("Listen Failed", ...);
+        TRACELOG("Connect Failed\n");
         return -1;
     }
 

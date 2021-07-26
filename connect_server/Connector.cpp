@@ -1,13 +1,56 @@
 
 #include "TCPConnector.hpp"
 
-CTCPConnector::CTCPConnector()
-{}
+typedef std::unorder_map<net_handle_t, CConnector*> ConnectMap;
+ConnectMap* g_pConnMap = nullptr;
 
-CTCPConnector::~CTCPConnector()
-{}
+void initConnectMap()
+{
+    if (nullptr != g_pConnMap)
+    {
+        return;
+    }
 
-int CTCPConnector::onRecvData()
+    // 在共享内存上创建
+}
+
+int addConnect(CConnector* pConn)
+{
+    g_pConnMap.insert(std::make_pair(pConn->getSocket(), pConn));
+}
+
+int removeConnect(CConnector* pConn)
+{
+    g_pConnMap.erase(pConn->getSocket());
+}
+
+CConnector* findConnect(net_handle_t fd)
+{
+    CConnector* pConn = nullptr;
+    ConnectMap::iterator iter = g_pConnMap.find(fd);
+    if (iter != g_pConnMap.end())
+    {
+        pConn = iter->second;
+    }
+
+    return pConn;
+}
+///////////////////////////////////////////////////////////////////
+
+CConnector::CConnector()
+{
+    m_socket = 0;
+    m_pRecvBuffer = new CBuffer;
+    m_pSendBuffer = new CBuffer;
+}
+
+CConnector::~CConnector()
+{
+    delete m_pRecvBuffer;
+    delete m_pSendBuffer;
+}
+
+int CConnector::onRecvData()
 {
     pthread_mutex_lock(m_stMutex);
 
@@ -17,8 +60,8 @@ int CTCPConnector::onRecvData()
     char* pcReadData = nullptr;
 
     // 先尝试接收一下
-    int iFreeByte = m_stRecvBuffer.getFreeSize();
-    int iRecvByte = pSocket->recvMsg((void*)pcReadData, m_stRecvBuffer.getMaxSize());
+    int iFreeByte = m_pRecvBuffer->getFreeSize();
+    int iRecvByte = pSocket->recvMsg((void*)pcReadData, m_pRecvBuffer->getMaxSize());
     if (iFreeByte < iRecvByte)
     {
         pthread_mutex_unlock(m_stMutex);
@@ -26,14 +69,14 @@ int CTCPConnector::onRecvData()
     }
 
     // 接收到的数据放入缓存
-    int iRet = m_stRecvBuffer.onWrite((const char*)pcReadData, iRecvByte);
+    int iRet = m_pRecvBuffer->onWrite((const char*)pcReadData, iRecvByte);
 
     pthread_mutex_unlock(m_stMutex);
 
     return iRet;
 }
 
-int CTCPConnector::onSendData(const char* pcSendData, int iLength)
+int CConnector::onSendData(const char* pcSendData, int iLength)
 {
     pthread_mutex_lock(m_stMutex);
 
@@ -43,13 +86,13 @@ int CTCPConnector::onSendData(const char* pcSendData, int iLength)
     int iRet = 0;
 
     // 先尝试发送滞留数据
-    if (!m_stSendBuffer.isEmpty())
+    if (!m_pSendBuffer->isEmpty())
     {
         do
         {
             char* pcLastData = nullptr;
             int iLastSize = 0;
-            iRet = m_stSendBuffer.onRead(pcLastData, iLastSize);
+            iRet = m_pSendBuffer->onRead(pcLastData, iLastSize);
             if (iRet < 0)
             {
                 break;
@@ -65,12 +108,12 @@ int CTCPConnector::onSendData(const char* pcSendData, int iLength)
     }
 
     // 不管怎样，整理一下
-    m_stSendBuffer.onTidy();
+    m_pSendBuffer->onTidy();
 
     // 没发完，直接放在后面
-    if (!m_stSendBuffer.isEmpty())
+    if (!m_pSendBuffer->isEmpty())
     {
-        iRet = m_stRecvBuffer.onWrite(pcSendData, iLength);
+        iRet = m_pRecvBuffer->onWrite(pcSendData, iLength);
         pthread_mutex_unlock(m_stMutex);
         return iRet;
     }
@@ -86,7 +129,7 @@ int CTCPConnector::onSendData(const char* pcSendData, int iLength)
             // 没发完的数据存入缓存
             if (iTempLen > 0)
             {
-                iRet = m_stRecvBuffer.onWrite(pTempData, iTempLen);
+                iRet = m_pRecvBuffer->onWrite(pTempData, iTempLen);
             }
 
             break;

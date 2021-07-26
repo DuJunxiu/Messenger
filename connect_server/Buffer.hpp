@@ -3,11 +3,128 @@
 #define __BUFFER_HPP__
 
 #include <string.h>
+#include <stdlib.h>
 
 static const int MAX_BUFFER_SIZE = 4096;
 
 // TODO: 缓冲区在共享内存上申请
 
+// 改用malloc 方便扩展
+class CBuffer
+{
+public:
+    // 默认构造
+    CBuffer()
+    {
+        m_size = 0;
+        m_offset = 0;
+        m_pBuffer = nullptr;
+    }
+
+    // 构造
+    CBuffer(int iMaxBufferSize)
+    {
+        m_offset = 0;
+        m_size = iMaxBufferSize;
+        m_pBuffer = (char*)malloc(iMaxBufferSize);
+    }
+
+    // 析构
+    ~CBuffer()
+    {
+        m_size = 0;
+        m_offset = 0;
+        m_pBuffer = nullptr;
+    }
+
+    // 写数据
+    int onWrite(const char* pReadData, int iLength)
+    {
+        if (nullptr == m_pBuffer)
+        {
+            return -1;
+        }
+
+        // 先尝试整理下
+        onTidy();
+
+        // 超了扩一下
+        if (iLength + m_offset > m_size)
+        {
+            int alloc_size = m_size - m_offset + iLength;
+            alloc_size += alloc_size >> 2;  // 额外预留 1/4
+            char* pTemp = realloc(m_pBuffer, alloc_size);
+            m_pBuffer = pTemp;
+        }
+
+        // 缓存进去
+        memcpy(&m_pBuffer[m_offset], pReadData, iLength);
+
+        return 0;
+    }
+
+    // 读数据
+    int onRead(char* pReadData, int& iLength)
+    {
+        if (nullptr == m_pBuffer)
+        {
+            return -1;
+        }
+
+        if (m_offset == m_size || 0 == m_offset)
+        {
+            return -1;
+        }
+
+        pReadData = &m_pBuffer[m_offset];
+        iLength = m_size - m_offset;
+
+        return 0;
+    }
+
+    // 缓冲区是否为空
+    bool isEmpty()
+    {
+        return m_offset == 0;
+    }
+
+    int getFreeSize()
+    {
+        onTidy();
+        return m_size - m_offset;
+    }
+
+    int getMaxSize()
+    {
+        return m_size;
+    }
+
+    // 整理
+    void onTidy()
+    {
+        if (0 == m_offset)
+        {
+            return;
+        }
+
+        if (!isEmpty())
+        {
+            memmove(&m_pBuffer[0], &m_pBuffer[m_offset], m_size - m_offset);
+            m_offset = 0;
+        }
+        else
+        {
+            m_offset = 0;
+        }
+    }
+
+private:
+    char* m_pBuffer;        // 指向该缓冲区的指针
+    int m_size;             // 缓冲区大小
+    int m_offset;           // 偏移量
+};
+
+#ifdef 0
 class CBuffer
 {
 public:
@@ -123,5 +240,6 @@ private:
     int m_iEndIndex;                    // 末尾元素索引
     int m_iStartIndex;                  // 起始元素索引
 };
+#endif
 
 #endif
