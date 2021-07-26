@@ -9,6 +9,8 @@ public:
     ~CMsgTransceiver();
 
 public:
+    static int unpackMsg(const CBuffer* pBuffer, char& proto, short& command, int& length);
+    static int packageMsg();
 
 private:
 

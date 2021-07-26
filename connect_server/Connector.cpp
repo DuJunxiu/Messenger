@@ -1,5 +1,6 @@
 
-#include "TCPConnector.hpp"
+#include "Connector.hpp"
+#include "MsgTransceiver.hpp"
 
 typedef std::unorder_map<net_handle_t, CConnector*> ConnectMap;
 ConnectMap* g_pConnMap = nullptr;
@@ -52,7 +53,9 @@ CConnector::~CConnector()
 
 int CConnector::onRecvData()
 {
-    pthread_mutex_lock(m_stMutex);
+    ASSERT_AND_LOG_RTN_INT(!m_busy);
+
+    m_busy = true;
 
     CBaseSocket* pSocket = findBaseSocket(m_socket);
     ASSERT_AND_LOG_RTN_INT(pSocket);
@@ -62,23 +65,22 @@ int CConnector::onRecvData()
     // 先尝试接收一下
     int iFreeByte = m_pRecvBuffer->getFreeSize();
     int iRecvByte = pSocket->recvMsg((void*)pcReadData, m_pRecvBuffer->getMaxSize());
-    if (iFreeByte < iRecvByte)
+    if (iFreeByte >= iRecvByte)
     {
-        pthread_mutex_unlock(m_stMutex);
-        return -1;
+        // 接收到的数据放入缓存
+        m_pRecvBuffer->onWrite((const char*)pcReadData, iRecvByte);
     }
 
-    // 接收到的数据放入缓存
-    int iRet = m_pRecvBuffer->onWrite((const char*)pcReadData, iRecvByte);
+    m_busy = false;
 
-    pthread_mutex_unlock(m_stMutex);
-
-    return iRet;
+    return 0;
 }
 
 int CConnector::onSendData(const char* pcSendData, int iLength)
 {
-    pthread_mutex_lock(m_stMutex);
+    ASSERT_AND_LOG_RTN_INT(!m_busy);
+
+    m_busy = true;
 
     CBaseSocket* pSocket = findBaseSocket(m_socket);
     ASSERT_AND_LOG_RTN_INT(pSocket);
@@ -114,7 +116,7 @@ int CConnector::onSendData(const char* pcSendData, int iLength)
     if (!m_pSendBuffer->isEmpty())
     {
         iRet = m_pRecvBuffer->onWrite(pcSendData, iLength);
-        pthread_mutex_unlock(m_stMutex);
+        m_busy = false;
         return iRet;
     }
 
@@ -139,7 +141,23 @@ int CConnector::onSendData(const char* pcSendData, int iLength)
         iTempLen -= iSendByte;
     } while (iRet >= 0);
 
-    pthread_mutex_unlock(m_stMutex);
+    m_busy = false;
 
     return iRet;
 }
+
+int CConnector::onRead()
+{
+    // 先接收到缓冲区
+    onRecvData();
+
+    while (!m_pRecvBuffer->isEmpty())
+    {
+        CMsgTransceiver::unpackMsg(m_pRecvBuffer, );
+
+        m_pRecvBuffer->onRead();
+    }
+}
+
+int CConnector::onWrite()
+{}

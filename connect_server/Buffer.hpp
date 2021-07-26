@@ -71,6 +71,8 @@ public:
             return -1;
         }
 
+        onTidy();
+
         if (m_offset == m_size || 0 == m_offset)
         {
             return -1;
@@ -107,7 +109,7 @@ public:
             return;
         }
 
-        if (!isEmpty())
+        if (!isEmpty() && m_size > m_offset)
         {
             memmove(&m_pBuffer[0], &m_pBuffer[m_offset], m_size - m_offset);
             m_offset = 0;

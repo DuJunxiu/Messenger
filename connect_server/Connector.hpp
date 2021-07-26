@@ -4,7 +4,6 @@
 
 // TCP连接类，管理TCP连接，负责TCP收发包
 
-#include <mutex>
 #include "Buffer.hpp"
 
 class CConnector
@@ -28,7 +27,7 @@ private:
     net_handle_t m_socket;          // 连接的socket
     CBuffer* m_pRecvBuffer;         // 接收缓冲区
     CBuffer* m_pSendBuffer;         // 发送缓冲区
-    pthread_mutex_t m_stMutex;      // 操作的互斥变量
+    bool m_busy;                    // 操作的互斥变量
 };
 
 #endif
