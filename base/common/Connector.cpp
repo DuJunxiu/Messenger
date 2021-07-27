@@ -164,6 +164,7 @@ int CConnector::onRead()
         }
 
         // 再转发
+        CHandle* pHandle = CHandlerFactory::getHandler(command);
 
         m_pRecvBuffer->onRead();
     }

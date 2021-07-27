@@ -1,6 +1,6 @@
 
-#ifndef __HANDLER_HPP__
-#define __HANDLER_HPP__
+#ifndef __HANDLE_HPP__
+#define __HANDLE_HPP__
 
 #include "Protocol.hpp"
 #include "LogDeal.hpp"
@@ -11,11 +11,11 @@ typedef struct
     uint32_t uiSrcIP;
 } NetHead;
 
-class CHandler
+class CHandle
 {
 public:
-    CHandler();
-    virtual ~CHandler() {}
+    CHandle();
+    virtual ~CHandle() {}
 
 public:
     void setReqMsgInfo(MainMsg* stReqMsg);
@@ -25,8 +25,8 @@ public:
     int getMsgID();
 
 public:
-    // 子协议处理函数
-    virtual int onClientMsg();
+    // 消息转发
+    virtual int onMsgTransmit();
 
 private:
     // int m_iMsgID;

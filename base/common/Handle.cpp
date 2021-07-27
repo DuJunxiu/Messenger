@@ -1,18 +1,18 @@
 
-#include "Handler.hpp"
+#include "Handle.hpp"
 
-CHandler::CHandler()
+CHandle::CHandle()
 {
     m_pstReqMsg = nullptr;
     // m_iMsgID = -1;
 }
 
-// void CHandler::setMsgID(int iMsgID)
+// void CHandle::setMsgID(int iMsgID)
 // {
     // m_iMsgID = iMsgID;
 // }
 
-int CHandler::getMsgID()
+int CHandle::getMsgID()
 {
     // return m_iMsgID;
     if (nullptr == m_pstReqMsg)
@@ -23,7 +23,7 @@ int CHandler::getMsgID()
     return m_pstReqMsg->stMsgHead.m_iMsgID;
 }
 
-void CHandler::setReqMsgInfo(MainMsg* stReqMsg)
+void CHandle::setReqMsgInfo(MainMsg* stReqMsg)
 {
     m_pstReqMsg = stReqMsg;
 
