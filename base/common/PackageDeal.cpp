@@ -9,7 +9,7 @@ CPackageDeal::CPackageDeal()
 CPackageDeal::~CPackageDeal()
 {}
 
-int CPackageDeal::unpackMsg(const CConnector* pConn, const CBuffer* pBuffer, MsgHead& stHead)
+int CPackageDeal::unpackMsg(const CConnector* pConn, const CBuffer* pBuffer, MainMsg& stMsg)
 {
     ASSERT_AND_LOG_RTN_INT(pConn);
     ASSERT_AND_LOG_RTN_INT(pBuffer);
@@ -20,16 +20,18 @@ int CPackageDeal::unpackMsg(const CConnector* pConn, const CBuffer* pBuffer, Msg
         return -1;
     }
 
-    stHead.m_ucMsgType = *(pBuffer->getBuffer() + offsetof(MainMsg, m_ucMsgType));
-    stHead.m_usVersion = ntohs(*(uint16_t*)(pBuffer->getBuffer() + offsetof(MainMsg, m_usVersion)));
-    stHead.m_usMsgID = ntohs(*(uint16_t*)(pBuffer->getBuffer() + offsetof(MainMsg, m_usMsgID)));
-    stHead.m_uiMsgLength = ntohl(*(uint32_t*)(pBuffer->getBuffer() + offsetof(MainMsg, m_uiMsgLength)));
+    stMsg.stMsgHead.m_ucMsgType = *(pBuffer->getBuffer() + offsetof(MainMsg, m_ucMsgType));
+    stMsg.stMsgHead.m_usVersion = ntohs(*(uint16_t*)(pBuffer->getBuffer() + offsetof(MainMsg, m_usVersion)));
+    stMsg.stMsgHead.m_usMsgID = ntohs(*(uint16_t*)(pBuffer->getBuffer() + offsetof(MainMsg, m_usMsgID)));
+    stMsg.stMsgHead.m_uiMsgLength = ntohl(*(uint32_t*)(pBuffer->getBuffer() + offsetof(MainMsg, m_uiMsgLength)));
 
     // 包不完整先不管
-    if (pBuffer->getSize() - offset < stHead.m_uiMsgLength)
+    if (pBuffer->getSize() - sizeof(MainMsg) < stMsg.stMsgHead.m_uiMsgLength)
     {
         return -1;
     }
+
+    // 解包体
 
     return 0;
 }

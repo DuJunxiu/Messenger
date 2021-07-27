@@ -26,7 +26,7 @@ public:
 
 public:
     // 消息转发
-    virtual int onMsgTransmit();
+    virtual int onMsgTransmit(const MainMsg& stMsg);
 
 private:
     // int m_iMsgID;

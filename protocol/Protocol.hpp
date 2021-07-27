@@ -42,7 +42,7 @@ typedef struct stMsgHead
     unsigned int m_uiMsgLength;
 } MsgHead;
 
-typedef struct stMsgBody
+typedef union stMsgBody
 {
 } MsgBody;
 

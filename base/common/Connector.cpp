@@ -155,8 +155,8 @@ int CConnector::onRead()
     while (!m_pRecvBuffer->isEmpty())
     {
         // 解包
-        MsgHead stHead;
-        if (CPackageDeal::unpackMsg(this, m_pRecvBuffer, stHead) < 0)
+        MainMsg stMsg;
+        if (CPackageDeal::unpackMsg(this, m_pRecvBuffer, stMsg) < 0)
         {
             break;
         }
@@ -169,7 +169,7 @@ int CConnector::onRead()
         }
 
         // 再转发
-        pHandle->onMsgTransmit();
+        pHandle->onMsgTransmit(stMsg);
 
         m_pRecvBuffer->onRead();
     }
