@@ -120,6 +120,12 @@ public:
         }
     }
 
+    // 缓冲区字节数
+    int getSize()
+    {
+        return m_offset;
+    }
+
 private:
     char* m_pBuffer;        // 指向该缓冲区的指针
     int m_size;             // 缓冲区大小

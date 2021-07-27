@@ -16,6 +16,9 @@ public:
     int getSocket() { return m_socket; }
     void setSocket(net_handle_t sock) { m_socket = sock; }
 
+    int getLastBytes() { return m_recvBytes; }
+    void setLastBytes(int size) { m_recvBytes = size; }
+
 public:
     int onRecvData();
     int onSendData(const char* pcSendData, int iLength);
@@ -28,6 +31,7 @@ private:
     CBuffer* m_pRecvBuffer;         // 接收缓冲区
     CBuffer* m_pSendBuffer;         // 发送缓冲区
     bool m_busy;                    // 操作的互斥变量
+    int m_recvBytes;                // 接收到的剩余字节
 };
 
 #endif

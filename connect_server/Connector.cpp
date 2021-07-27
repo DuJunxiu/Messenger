@@ -148,12 +148,23 @@ int CConnector::onSendData(const char* pcSendData, int iLength)
 
 int CConnector::onRead()
 {
-    // 先接收到缓冲区
+    // 接收到缓冲区
     onRecvData();
 
     while (!m_pRecvBuffer->isEmpty())
     {
-        CMsgTransceiver::unpackMsg(m_pRecvBuffer, );
+        // 解包
+        char protocal = 0;
+        short command = 0;
+        int length = 0;
+        if (CMsgTransceiver::unpackMsg(this, m_pRecvBuffer, protocal, command, length) < 0)
+        {
+            break;
+        }
+
+        // 再转发
+
+        // 更新剩余的字节数
 
         m_pRecvBuffer->onRead();
     }
