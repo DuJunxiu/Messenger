@@ -2,9 +2,12 @@
 #ifndef __EVENT_DISPATCH_HPP__
 #define __EVENT_DISPATCH_HPP__
 
+#include <string.h>
 #include <sys/select.h>
+#include <poll.h>
 #include <sys/epoll.h>
 
+#include "Utility.hpp"
 #include "Config.h"
 #include "Singleton.h"
 
@@ -32,7 +35,12 @@ public:
     void AddEvent(net_handle_t fd, uint8_t socket_event);
     void RemoveEvent(net_handle_t fd, uint8_t socket_event);
 
+public:
+    void dispatchLoop(int cmd);
+
 private:
+    CLock m_lock;
+
 #ifdef EVENT_MODE_SELECT
     fd_set  m_read_set;
     fd_set  m_write_set;

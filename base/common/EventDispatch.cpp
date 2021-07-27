@@ -45,6 +45,41 @@ void CEventDispatch::RemoveEvent(net_handle_t fd, uint8_t socket_event)
     }
 }
 
+void CEventDispatch::dispatchLoop(int cmd)
+{
+    fd_set read_set, write_set, excep_set;
+
+    while (true)
+    {
+        if (RELOAD == cmd)
+        {
+            DBUtilitySingleton::GetInstance()->loadConfig(strFileName);
+            cmd = NOTHING;
+        }
+        else if (STOP == cmd)
+        {
+            break;
+        }
+
+        if (0 == m_read_set.fd_count || 0 == m_write_set.fd_count || 0 == m_excep_set.fd_count)
+        {
+            continue;
+        }
+
+        m_lock.lock();
+        memcpy(&read_set, &m_read_set, sizeof(fd_set));
+        memcpy(&write_set, &m_write_set, sizeof(fd_set));
+        memcpy(&excep_set, &m_excep_set, sizeof(fd_set));
+        m_lock.unlock();
+
+        int nfds = select(0, &read_set, &write_set, &excep_set, &timeout);
+        if (nfds <= 0)
+        {
+            continue;
+        }
+    }
+}
+
 #elif EVENT_MODE_POLL
 
 void CEventDispatch::AddEvent(net_handle_t fd, uint8_t socket_event)

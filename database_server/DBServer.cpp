@@ -2,6 +2,7 @@
 #include <cstring>
 
 #include "EventLoop.hpp"
+#include "EventDispatch.hpp"
 
 const std::string DB_CONFIG_FILE(".conf");
 
@@ -22,7 +23,7 @@ int main(int argc, char* argv[])
             cmd = RESUME;
     }
 
-    EventLoopSingleton::GetInstance()->run(cmd, DB_CONFIG_FILE);
+    EventDispatchSingleton::GetInstance()->dispatchLoop();
 
     return 0;
 }
