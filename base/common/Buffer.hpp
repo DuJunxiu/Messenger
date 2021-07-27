@@ -51,9 +51,15 @@ public:
         // 超了扩一下
         if (iLength + m_offset > m_size)
         {
+            if (m_size >= MAX_BUFFER_SIZE)
+            {
+                return -1;
+            }
+
             int alloc_size = m_size - m_offset + iLength;
             alloc_size += alloc_size >> 2;  // 额外预留 1/4
             char* pTemp = realloc(m_pBuffer, alloc_size);
+            m_size = alloc_size;
             m_pBuffer = pTemp;
         }
 

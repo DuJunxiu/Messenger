@@ -165,8 +165,6 @@ int CConnector::onRead()
 
         // 再转发
 
-        // 更新剩余的字节数
-
         m_pRecvBuffer->onRead();
     }
 }

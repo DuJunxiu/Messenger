@@ -31,7 +31,7 @@ private:
     CBuffer* m_pRecvBuffer;         // 接收缓冲区
     CBuffer* m_pSendBuffer;         // 发送缓冲区
     bool m_busy;                    // 操作的互斥变量
-    int m_recvBytes;                // 接收到的剩余字节
+
 };
 
 #endif

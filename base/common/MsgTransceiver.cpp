@@ -33,7 +33,17 @@ int CMsgTransceiver::unpackMsg(const CConnector* pConn, const CBuffer* pBuffer, 
     offset += sizeof(command);
     length = *(int*)(pBuffer->getBuffer() + offset);
     offset += sizeof(length);
+
+    // 包不完整先不管
+    if (pBuffer->getSize() - offset < length)
+    {
+        return -1;
+    }
+
+    return 0;
 }
 
 int CMsgTransceiver::packageMsg()
-{}
+{
+    return 0;
+}
