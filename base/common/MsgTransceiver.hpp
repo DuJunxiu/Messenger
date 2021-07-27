@@ -9,10 +9,8 @@ public:
     ~CMsgTransceiver();
 
 public:
-    static int unpackMsg(const CConnector* pConn, const CBuffer* pBuffer, char& proto, short& command, int& length);
+    static int unpackMsg(const CConnector* pConn, const CBuffer* pBuffer, char& type, short& command, int& length);
     static int packageMsg();
-
-    static bool checkCanUnpack(const CConnector* pConn, const CBuffer* pBuffer);
 
 private:
 

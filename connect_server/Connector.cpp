@@ -154,10 +154,11 @@ int CConnector::onRead()
     while (!m_pRecvBuffer->isEmpty())
     {
         // 解包
-        char protocal = 0;
+        // int version = 0;
+        char type = 0;
         short command = 0;
         int length = 0;
-        if (CMsgTransceiver::unpackMsg(this, m_pRecvBuffer, protocal, command, length) < 0)
+        if (CMsgTransceiver::unpackMsg(this, m_pRecvBuffer, type, command, length) < 0)
         {
             break;
         }

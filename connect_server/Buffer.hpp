@@ -84,23 +84,6 @@ public:
         return 0;
     }
 
-    // 缓冲区是否为空
-    bool isEmpty()
-    {
-        return m_offset == 0;
-    }
-
-    int getFreeSize()
-    {
-        onTidy();
-        return m_size - m_offset;
-    }
-
-    int getMaxSize()
-    {
-        return m_size;
-    }
-
     // 整理
     void onTidy()
     {
@@ -120,10 +103,32 @@ public:
         }
     }
 
+    // 缓冲区是否为空
+    bool isEmpty()
+    {
+        return m_offset == 0;
+    }
+
+    int getFreeSize()
+    {
+        onTidy();
+        return m_size - m_offset;
+    }
+
+    int getMaxSize()
+    {
+        return m_size;
+    }
+
     // 缓冲区字节数
     int getSize()
     {
         return m_offset;
+    }
+
+    const char* getBuffer()
+    {
+        return m_pBuffer;
     }
 
 private:
