@@ -1,14 +1,14 @@
 
-#include "MsgTransceiver.hpp"
+#include "PackageDeal.hpp"
 #include "Connector.hpp"
 
-CMsgTransceiver::CMsgTransceiver()
+CPackageDeal::CPackageDeal()
 {}
 
-CMsgTransceiver::~CMsgTransceiver()
+CPackageDeal::~CPackageDeal()
 {}
 
-int CMsgTransceiver::unpackMsg(const CConnector* pConn, const CBuffer* pBuffer, char& type, short& command, int& length)
+int CPackageDeal::unpackMsg(const CConnector* pConn, const CBuffer* pBuffer, char& type, short& command, int& length)
 {
     ASSERT_AND_LOG_RTN_INT(pConn);
     ASSERT_AND_LOG_RTN_INT(pBuffer);
@@ -43,7 +43,7 @@ int CMsgTransceiver::unpackMsg(const CConnector* pConn, const CBuffer* pBuffer, 
     return 0;
 }
 
-int CMsgTransceiver::packageMsg()
+int CPackageDeal::packageMsg()
 {
     return 0;
 }

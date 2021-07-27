@@ -1,6 +1,6 @@
 
 #include "Connector.hpp"
-#include "MsgTransceiver.hpp"
+#include "PackageDeal.hpp"
 
 typedef std::unorder_map<net_handle_t, CConnector*> ConnectMap;
 ConnectMap* g_pConnMap = nullptr;
@@ -158,7 +158,7 @@ int CConnector::onRead()
         char type = 0;
         short command = 0;
         int length = 0;
-        if (CMsgTransceiver::unpackMsg(this, m_pRecvBuffer, type, command, length) < 0)
+        if (CPackageDeal::unpackMsg(this, m_pRecvBuffer, type, command, length) < 0)
         {
             break;
         }

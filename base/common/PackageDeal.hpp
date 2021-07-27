@@ -1,12 +1,12 @@
 
-#ifndef __MSG_TRANSCEIVER_HPP
-#define __MSG_TRANSCEIVER_HPP
+#ifndef __PACKAGE_DEAL_HPP__
+#define __PACKAGE_DEAL_HPP__
 
-class CMsgTransceiver
+class CPackageDeal
 {
 public:
-    CMsgTransceiver();
-    ~CMsgTransceiver();
+    CPackageDeal();
+    ~CPackageDeal();
 
 public:
     static int unpackMsg(const CConnector* pConn, const CBuffer* pBuffer, char& type, short& command, int& length);
