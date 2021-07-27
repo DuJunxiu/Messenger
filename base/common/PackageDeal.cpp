@@ -1,6 +1,7 @@
 
 #include "PackageDeal.hpp"
 #include "Connector.hpp"
+#include "Protocol.hpp"
 
 CPackageDeal::CPackageDeal()
 {}
@@ -8,17 +9,10 @@ CPackageDeal::CPackageDeal()
 CPackageDeal::~CPackageDeal()
 {}
 
-int CPackageDeal::unpackMsg(const CConnector* pConn, const CBuffer* pBuffer, char& type, short& command, int& length)
+int CPackageDeal::unpackMsg(const CConnector* pConn, const CBuffer* pBuffer, MsgHead& stHead)
 {
     ASSERT_AND_LOG_RTN_INT(pConn);
     ASSERT_AND_LOG_RTN_INT(pBuffer);
-
-    // 上一次的还没接收完
-    if (pConn->getLastBytes() > 0)
-    {
-        length = pBuffer->getSize() >= pConn->getLastBytes() ? pConn->getLastBytes() : pBuffer->getSize();
-        return 0;
-    }
 
     // 不够一个包先不管
     if (pBuffer->getSize() <= sizeof(MsgHead))
@@ -26,16 +20,13 @@ int CPackageDeal::unpackMsg(const CConnector* pConn, const CBuffer* pBuffer, cha
         return -1;
     }
 
-    int offset = 0;
-    type = *(pBuffer->getBuffer() + offset);
-    offset += sizeof(type);
-    command = *(short*)(pBuffer->getBuffer() + offset);
-    offset += sizeof(command);
-    length = *(int*)(pBuffer->getBuffer() + offset);
-    offset += sizeof(length);
+    stHead.m_ucMsgType = *(pBuffer->getBuffer() + offsetof(MainMsg, m_ucMsgType));
+    stHead.m_usVersion = ntohs(*(uint16_t*)(pBuffer->getBuffer() + offsetof(MainMsg, m_usVersion)));
+    stHead.m_usMsgID = ntohs(*(uint16_t*)(pBuffer->getBuffer() + offsetof(MainMsg, m_usMsgID)));
+    stHead.m_uiMsgLength = ntohl(*(uint32_t*)(pBuffer->getBuffer() + offsetof(MainMsg, m_uiMsgLength)));
 
     // 包不完整先不管
-    if (pBuffer->getSize() - offset < length)
+    if (pBuffer->getSize() - offset < stHead.m_uiMsgLength)
     {
         return -1;
     }

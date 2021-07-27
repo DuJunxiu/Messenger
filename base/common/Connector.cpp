@@ -1,6 +1,7 @@
 
 #include "Connector.hpp"
 #include "PackageDeal.hpp"
+#include "HandleFactory.hpp"
 
 typedef std::unorder_map<net_handle_t, CConnector*> ConnectMap;
 ConnectMap* g_pConnMap = nullptr;
@@ -154,17 +155,21 @@ int CConnector::onRead()
     while (!m_pRecvBuffer->isEmpty())
     {
         // 解包
-        // int version = 0;
-        char type = 0;
-        short command = 0;
-        int length = 0;
-        if (CPackageDeal::unpackMsg(this, m_pRecvBuffer, type, command, length) < 0)
+        MsgHead stHead;
+        if (CPackageDeal::unpackMsg(this, m_pRecvBuffer, stHead) < 0)
         {
             break;
         }
 
-        // 再转发
         CHandle* pHandle = CHandlerFactory::getHandler(command);
+        if (nullptr == pHandle)
+        {
+            TRACELOG("can't find command id : %d\n", command);
+            break;
+        }
+
+        // 再转发
+        pHandle->onMsgTransmit();
 
         m_pRecvBuffer->onRead();
     }

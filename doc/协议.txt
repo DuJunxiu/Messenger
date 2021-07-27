@@ -1,5 +1,5 @@
 包：
-version      4字节
+version      2字节
 type          1字节
 command 2字节
 length       4字节

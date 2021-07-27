@@ -9,7 +9,7 @@ public:
     ~CPackageDeal();
 
 public:
-    static int unpackMsg(const CConnector* pConn, const CBuffer* pBuffer, char& type, short& command, int& length);
+    static int unpackMsg(const CConnector* pConn, const CBuffer* pBuffer, MsgHead& stHead);
     static int packageMsg();
 
 private:

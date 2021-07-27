@@ -36,8 +36,10 @@
 //////////////////////////// 主协议结构 /////////////////////////////
 typedef struct stMsgHead
 {
-    int m_iMsgID;
-    int m_iUnitID;
+    unsigned short m_usVersion;
+    unsigned short m_usMsgID;
+    unsigned char m_ucMsgType;
+    unsigned int m_uiMsgLength;
 } MsgHead;
 
 typedef struct stMsgBody
