@@ -2,10 +2,15 @@
 #ifndef __EVENT_DISPATCH_HPP__
 #define __EVENT_DISPATCH_HPP__
 
-#include <string.h>
-#include <sys/select.h>
-#include <poll.h>
+#ifdef _WIN32
+#include <WinSock2.h>
+#elif
+// #include <sys/select.h>
+// #include <poll.h>
 #include <sys/epoll.h>
+#endif
+
+#include <string.h>
 
 #include "Utility.hpp"
 #include "Config.h"
@@ -13,9 +18,7 @@
 
 using namespace MyMessenger;
 
-#define EVENT_MODE_SELECT   1
-#define EVENT_MODE_POLL     0
-#define EVENT_MODE_EPOLL    0
+#define MAX_EVENT_NUMBER 1024
 
 enum
 {
@@ -41,13 +44,15 @@ public:
 private:
     CLock m_lock;
 
-#ifdef EVENT_MODE_SELECT
-    fd_set  m_read_set;
-    fd_set  m_write_set;
-    fd_set  m_excep_set;
-#elif EVENT_MODE_POLL
-    int     m_pollfd;
-#else
+// // select
+//     fd_set  m_read_set;
+//     fd_set  m_write_set;
+//     fd_set  m_excep_set;
+
+// // poll
+//     int     m_pollfd;
+
+// epoll
     int     m_epollfd;
 #endif
 };

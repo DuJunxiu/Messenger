@@ -164,7 +164,7 @@ void CBaseSocket::OnRead()
     char ip_str[64];
     while (fd = accept(m_socket, (sockaddr*)&peer_addr, &addr_len)) > 0)
     {
-        CBaseSocket* pSocket = new CBaseSocket;
+        CBaseSocket* pSocket = new CBaseSocket();
         uint32_t ip = ntohl(peer_addr.sin_addr.s_addr);
         uint16_t port = ntohs(peer_addr.sin_port);
 
