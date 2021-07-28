@@ -36,7 +36,7 @@ public:
     void RemoveEvent(net_handle_t fd, uint8_t socket_event);
 
 public:
-    void dispatchLoop(int cmd);
+    void dispatchLoop();
 
 private:
     CLock m_lock;

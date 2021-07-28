@@ -10,17 +10,16 @@ int main(int argc, char* argv[])
 {
     DBUtilitySingleton::GetInstance()->loadConfig(DB_CONFIG_FILE);
 
-    int cmd = NOTHING;
     if (argc >= 1)
     {
         if (0 == strcmp(argv[0], "reload"))
-            cmd = RELOAD;
+            DBUtilitySingleton::GetInstance()->loadConfig(strFileName);
         else if (0 == strcmp(argv[0], "start"))
-            cmd = START;
+            ;
         else if (0 == strcmp(argv[0], "stop"))
-            cmd = STOP;
+            return 0;
         else if (0 == strcmp(argv[0], "resume"))
-            cmd = RESUME;
+            ;
     }
 
     EventDispatchSingleton::GetInstance()->dispatchLoop();

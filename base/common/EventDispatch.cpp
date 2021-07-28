@@ -1,5 +1,6 @@
 
 #include "EventDispatch.hpp"
+#include "SocketUtility.hpp"
 
 CEventDispatch::CEventDispatch()
 {}
@@ -45,22 +46,12 @@ void CEventDispatch::RemoveEvent(net_handle_t fd, uint8_t socket_event)
     }
 }
 
-void CEventDispatch::dispatchLoop(int cmd)
+void CEventDispatch::dispatchLoop()
 {
     fd_set read_set, write_set, excep_set;
 
     while (true)
     {
-        if (RELOAD == cmd)
-        {
-            DBUtilitySingleton::GetInstance()->loadConfig(strFileName);
-            cmd = NOTHING;
-        }
-        else if (STOP == cmd)
-        {
-            break;
-        }
-
         if (0 == m_read_set.fd_count || 0 == m_write_set.fd_count || 0 == m_excep_set.fd_count)
         {
             continue;
@@ -76,6 +67,16 @@ void CEventDispatch::dispatchLoop(int cmd)
         if (nfds <= 0)
         {
             continue;
+        }
+
+        for (uint32_t i = 0; i < read_set.fd_count; i++)
+        {
+            SOCKET fd = read_set.fd_array[i];
+            CBaseSocket* pSocket = FindBaseSocket((net_handle_t)fd);
+            if (nullptr != pSocket)
+            {
+                pSocket->OnRead();
+            }
         }
     }
 }
