@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unorder_map>
+#include <memory>
 
 #include "LogDeal.hpp"
 #include "Config.h"
@@ -80,6 +81,9 @@ namespace MyMessenger
         void setLocalIP(char* pLocalIP) { m_local_ip = to_string(pLocalIP); }
         uint16_t getLocalPort() { return m_local_port; }
         void setLocalPort(uint16_t port) { m_local_port = port; }
+        
+        void addRef();
+        void removeRef();
 
     private:
         std::string     m_remote_ip;    // 远程ip
@@ -89,6 +93,8 @@ namespace MyMessenger
 
         net_handle_t    m_socket;       // socket id
         uint8_t         m_state;        // socket状态
+
+        std::shared_ptr<CBaseSocket*> m_pRef;
 
     };
 }

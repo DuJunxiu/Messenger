@@ -145,7 +145,6 @@ void CEventDispatch::dispatchLoop()
         }
     }
 }
+
 #endif
-
-
 

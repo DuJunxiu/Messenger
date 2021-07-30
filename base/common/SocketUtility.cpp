@@ -46,6 +46,7 @@ CBaseSocket::CBaseSocket()
 {
     m_socket = ERROR_SOCKET;
     m_state = SOCKET_STATE_IDLE;
+    m_pRef.reset();
 }
 
 CBaseSocket::~CBaseSocket()
@@ -149,6 +150,10 @@ void CBaseSocket::closeSocket(void)
     REMOVE_EVENT(m_socket, SOCKET_ALL);
     close(m_socket);
     removeSocket(this);
+    if (m_pRef.use_count() == 0)
+    {
+        delete this;
+    }
 }
 
 void CBaseSocket::OnRead()
@@ -193,3 +198,9 @@ void CBaseSocket::OnClose()
     m_state = SOCKET_STATE_CLOSING;
 }
 
+void CBaseSocket::addRef()
+{
+}
+
+void CBaseSocket::removeRef()
+{}
