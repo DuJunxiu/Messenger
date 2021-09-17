@@ -1,8 +1,6 @@
 
 #include <stdio.h>
 #include <unistd.h>
-
-#include "mq_bus.hpp"
 #include "SharedMemory.hpp"
 
 using namespace MyMessenger;

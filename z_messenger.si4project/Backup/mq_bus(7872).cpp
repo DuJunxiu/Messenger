@@ -55,23 +55,4 @@ int CMQBus::initialize(int iKey, int iSize)
     return 0;
 }
 
-// 数据出队列
-int CMQBus::busDequeue()
-{
-    ASSERT_AND_LOG_RTN_INT(m_pstShm);
-    ASSERT_AND_LOG_RTN_INT(m_pstSemLock);
-    ASSERT_AND_LOG_RTN_INT(m_pHead);
-
-    // 先上锁
-
-    // 空间是否足够
-
-    return 0;
-}
-
-// 数据进队列
-int CMQBus::busEequeue()
-{
-    return 0;
-}
 
